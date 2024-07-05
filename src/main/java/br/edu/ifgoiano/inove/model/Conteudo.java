@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
+@Entity(name = "tb_conteudo")
 @Getter
 @Setter
 public class Conteudo {
