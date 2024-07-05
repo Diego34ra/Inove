@@ -1,9 +1,6 @@
 package br.edu.ifgoiano.inove.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +10,7 @@ import lombok.Setter;
 public class Escola {
 
     @Id
+    @Column(name = "escola_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
