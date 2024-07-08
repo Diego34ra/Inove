@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Entity
+@Entity(name = "tb_secao")
 @Getter
 @Setter
 public class Secao {

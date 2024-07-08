@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
+@Entity(name = "tb_feedback")
 public class FeedBack {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
