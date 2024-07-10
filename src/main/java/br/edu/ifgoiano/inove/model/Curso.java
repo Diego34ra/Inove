@@ -25,4 +25,10 @@ public class Curso {
             joinColumns = @JoinColumn(name = "curso_id"),
             inverseJoinColumns = @JoinColumn(name = "usuario_id"))
     private List<Usuario> usuarios;
+
+    @OneToMany(mappedBy = "curso")
+    private List<FeedBack> feedBacks;
+
+    @OneToMany(mappedBy = "curso")
+    private List<Secao> secoes;
 }

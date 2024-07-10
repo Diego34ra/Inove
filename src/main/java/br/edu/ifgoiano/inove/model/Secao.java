@@ -20,6 +20,10 @@ public class Secao {
 
     private String descricao;
 
+    @ManyToOne
+    @JoinColumn(name = "curso_id")
+    private Curso curso;
+
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "secao")
     private List<Conteudo> conteudos;
 }
