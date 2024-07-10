@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity(name = "tb_usuario")
 @Getter
 @Setter
@@ -22,6 +24,16 @@ public class Usuario {
     private String email;
 
     private String senha;
+
+    @ManyToOne
+    @JoinColumn(name = "escola_id")
+    private Escola escola;
+
+    @ManyToMany
+    @JoinTable(name = "tb_usuario_curso",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "curso_id"))
+    private List<Curso> cursos;
 
     @Enumerated(EnumType.STRING)
     private UsuarioRole tipo;
