@@ -23,5 +23,5 @@ public class Escola {
     private String estado;
 
     @OneToMany(mappedBy = "escola")
-    private List<Usuario> usuarios;
+    private List<Usuario> dicentes;
 }

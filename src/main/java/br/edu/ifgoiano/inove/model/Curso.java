@@ -21,10 +21,22 @@ public class Curso {
     private String descricao;
 
     @ManyToMany
-    @JoinTable(name = "tb_usuario_curso",
+    @JoinTable(name = "tb_discente_curso",
             joinColumns = @JoinColumn(name = "curso_id"),
-            inverseJoinColumns = @JoinColumn(name = "usuario_id"))
-    private List<Usuario> usuarios;
+            inverseJoinColumns = @JoinColumn(name = "discente_id"))
+    private List<Usuario> discentes;
+
+    @ManyToMany
+    @JoinTable(name = "tb_admin_curso",
+            joinColumns = @JoinColumn(name = "curso_id"),
+            inverseJoinColumns = @JoinColumn(name = "admin_id"))
+    private List<Usuario> admins;
+
+    @ManyToMany
+    @JoinTable(name = "tb_instrutor_curso",
+            joinColumns = @JoinColumn(name = "curso_id"),
+            inverseJoinColumns = @JoinColumn(name = "instrutor_id"))
+    private List<Usuario> instrutores ;
 
     @OneToMany(mappedBy = "curso")
     private List<FeedBack> feedBacks;
