@@ -1,4 +1,4 @@
-package br.edu.ifgoiano.inove.model;
+package br.edu.ifgoiano.inove.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
