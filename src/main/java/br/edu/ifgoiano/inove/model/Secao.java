@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Entity
+@Entity(name = "tb_secao")
 @Getter
 @Setter
 public class Secao {
@@ -19,6 +19,10 @@ public class Secao {
     private String titulo;
 
     private String descricao;
+
+    @ManyToOne
+    @JoinColumn(name = "curso_id")
+    private Curso curso;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "secao")
     private List<Conteudo> conteudos;
