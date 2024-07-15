@@ -1,6 +1,6 @@
-package br.edu.ifgoiano.inove.repository;
+package br.edu.ifgoiano.inove.domain.repository;
 
-import br.edu.ifgoiano.inove.model.Usuario;
+import br.edu.ifgoiano.inove.domain.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
