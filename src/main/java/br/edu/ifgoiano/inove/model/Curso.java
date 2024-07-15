@@ -13,6 +13,7 @@ import java.util.List;
 @Entity(name = "tb_curso")
 public class Curso {
     @Id
+    @Column(name = "curso_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
