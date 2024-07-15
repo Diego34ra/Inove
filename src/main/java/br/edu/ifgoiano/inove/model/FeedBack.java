@@ -11,6 +11,7 @@ import lombok.Setter;
 @Entity(name = "tb_feedback")
 public class FeedBack {
     @Id
+    @Column(name = "feedback_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
