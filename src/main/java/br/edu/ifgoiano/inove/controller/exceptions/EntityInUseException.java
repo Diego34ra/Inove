@@ -1,4 +1,4 @@
-package br.edu.ifgoiano.inove.domain.exceptions;
+package br.edu.ifgoiano.inove.controller.exceptions;
 
 import org.springframework.dao.DataIntegrityViolationException;
 

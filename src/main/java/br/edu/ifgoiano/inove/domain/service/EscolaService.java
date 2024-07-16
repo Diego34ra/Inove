@@ -9,7 +9,7 @@ public interface EscolaService {
 
     Escola findById(Long id);
 
-    Escola add (Escola newEscola);
+    Escola create (Escola newEscola);
 
     Escola update (Long id, Escola escola);
 
