@@ -1,4 +1,4 @@
-package br.edu.ifgoiano.inove.domain.exceptions;
+package br.edu.ifgoiano.inove.controller.exceptions;
 
 public class EscolaInUseException extends EntityInUseException{
     public EscolaInUseException(String msg) {
