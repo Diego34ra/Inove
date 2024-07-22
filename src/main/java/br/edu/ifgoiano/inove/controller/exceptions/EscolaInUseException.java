@@ -1,6 +1,6 @@
 package br.edu.ifgoiano.inove.controller.exceptions;
 
-public class EscolaInUseException extends EntityInUseException{
+public class EscolaInUseException extends ResourceInUseException {
     public EscolaInUseException(String msg) {
         super(msg);
     }

@@ -2,8 +2,8 @@ package br.edu.ifgoiano.inove.controller.exceptions;
 
 import org.springframework.dao.DataIntegrityViolationException;
 
-public class EntityInUseException extends DataIntegrityViolationException{
-    public EntityInUseException(String msg) {
+public class ResourceInUseException extends DataIntegrityViolationException{
+    public ResourceInUseException(String msg) {
         super(msg);
     }
 }
