@@ -1,9 +1,13 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
-import br.edu.ifgoiano.inove.controller.exceptions.*;
+import br.edu.ifgoiano.inove.controller.exceptions.EscolaInUseException;
+import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
+import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Escola;
-import br.edu.ifgoiano.inove.domain.repository.EscolaRespository;
-import br.edu.ifgoiano.inove.domain.service.EscolaService;
+import br.edu.ifgoiano.inove.domain.model.Usuario;
+import br.edu.ifgoiano.inove.domain.model.UsuarioRole;
+import br.edu.ifgoiano.inove.domain.repository.UsuarioRepository;
+import br.edu.ifgoiano.inove.domain.service.UsuarioService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -17,33 +21,33 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class EscolaServiceImpl implements EscolaService {
+public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
-    private EscolaRespository escolaRespository;
+    private UsuarioRepository userRespository;
 
     @Override
-    public List<Escola> list() {
-        return escolaRespository.findAll();
+    public List<Usuario> list() {
+        return userRespository.findAll();
     }
 
     @Override
-    public Escola findById(Long id) {
-        return escolaRespository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhuma escola com esse id."));
-    }
-
-    @Override
-    @Transactional
-    public Escola create(Escola escola) {
-        return escolaRespository.save(escola);
+    public Usuario findById(Long id) {
+        return userRespository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhum usuario com esse id."));
     }
 
     @Override
     @Transactional
-    public Escola update(Long id, Escola escolaUpdate) {
-        Escola escola = findById(id);
-        BeanUtils.copyProperties(escolaUpdate, escola, getNullPropertyNames(escolaUpdate));
-        return escolaRespository.save(escola);
+    public Usuario create(Usuario user) {
+        return userRespository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public Usuario update(Long id, Usuario userUpdate) {
+        Usuario user = findById(id);
+        BeanUtils.copyProperties(userUpdate, user, getNullPropertyNames(userUpdate));
+        return userRespository.save(user);
     }
 
     private String[] getNullPropertyNames(Object source) {
@@ -63,10 +67,15 @@ public class EscolaServiceImpl implements EscolaService {
     @Transactional
     public void deleteById(Long id) {
         try{
-            Escola escola = findById(id);
-            escolaRespository.delete(escola);
+            Usuario user = findById(id);
+            userRespository.delete(user);
         } catch (DataIntegrityViolationException ex){
             throw new ResourceInUseException("O usuário de ID %d esta em uso e não pode ser removido.");
         }
+    }
+
+    @Override
+    public List<Usuario> listUserByRole(String role) {
+        return userRespository.findByTipoContaining(role);
     }
 }
