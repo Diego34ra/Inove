@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.inove.controller;
 
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
+import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Escola;
 import br.edu.ifgoiano.inove.domain.service.EscolaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,10 @@ public class EscolaController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedEscola);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{escolaId}")
     public ResponseEntity<?> deleteEscola(@PathVariable String escolaId){
-        escolaService.deleteById(Long.parseLong(escolaId));
-        return ResponseEntity.noContent().build();
+            escolaService.deleteById(Long.parseLong(escolaId));
+            return ResponseEntity.noContent().build();
     }
 }
