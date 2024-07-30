@@ -2,7 +2,7 @@ spring:
   application:
     name: inove
   datasource:
-    url: jdbc:mysql://localhost:3306/inove?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/inove?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password: 123456
   jpa:
