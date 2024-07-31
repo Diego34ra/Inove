@@ -4,6 +4,7 @@ import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Curso;
 import br.edu.ifgoiano.inove.domain.repository.CursoRepository;
 import br.edu.ifgoiano.inove.domain.service.CursoService;
+import br.edu.ifgoiano.inove.domain.utils.InoveUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -19,6 +20,9 @@ public class CursoServiceImpl implements CursoService {
 
     @Autowired
     private CursoRepository cursoRepository;
+
+    @Autowired
+    private InoveUtils inoveUtils;
 
     @Override
     public Curso create(Curso curso) {
@@ -39,21 +43,8 @@ public class CursoServiceImpl implements CursoService {
     @Override
     public Curso update(Long id, Curso cursoUpdate) {
         Curso curso = findById(id);
-        BeanUtils.copyProperties(cursoUpdate, curso, getNullPropertyNames(cursoUpdate));
+        BeanUtils.copyProperties(cursoUpdate, curso, inoveUtils.getNullPropertyNames(cursoUpdate));
         return cursoRepository.save(curso);
-    }
-
-    private String[] getNullPropertyNames(Object source) {
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
-        Set<String> emptyNames = new HashSet<>();
-        for (java.beans.PropertyDescriptor pd : pds) {
-            Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) emptyNames.add(pd.getName());
-        }
-        String[] result = new String[emptyNames.size()];
-        return emptyNames.toArray(result);
     }
 
     @Override
