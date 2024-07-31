@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.inove.controller;
 
+import br.edu.ifgoiano.inove.controller.dto.SecaoSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Escola;
 import br.edu.ifgoiano.inove.domain.model.Secao;
@@ -13,20 +14,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/inove/secoes")
+@RequestMapping("api/inove/cursos/{courseId}/secoes")
 public class SecaoController {
     @Autowired
     private SecaoService sectionService;
 
     @GetMapping
-    public List<Secao> listSection(){
-        return sectionService.list();
+    public List<SecaoSimpleOutputDTO> list(@PathVariable Long courseId){
+        return sectionService.list(courseId);
     }
 
     @GetMapping("/{sectionId}")
-    public ResponseEntity<?> findOneSection(@PathVariable String sectionId){
+    public ResponseEntity<?> findOne(@PathVariable Long courseId, @PathVariable Long sectionId){
         try {
-            Secao savedSection = sectionService.findById(Long.parseLong(sectionId));
+            Secao savedSection = sectionService.findById(courseId, sectionId);
 
             return ResponseEntity.status(HttpStatus.OK).body(savedSection);
         }catch(EscolaNotFoundException ex){
@@ -35,21 +36,21 @@ public class SecaoController {
     }
 
     @PostMapping
-    public Secao createSection(@RequestBody @Validated  Secao section){
-        return sectionService.create(section);
+    public Secao create(@PathVariable Long courseId, @RequestBody @Validated  Secao section){
+        return sectionService.create(courseId, section);
     }
 
     @PutMapping("/{sectionId}")
-    public ResponseEntity<?> updateSection(@PathVariable Long sectionId, @RequestBody Secao section){
-        Secao updatedSection = sectionService.update(sectionId, section);
+    public ResponseEntity<?> update(@PathVariable Long courseId, @PathVariable Long sectionId, @RequestBody Secao section){
+        Secao updatedSection = sectionService.update(courseId, sectionId, section);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedSection);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{sectionId}")
-    public ResponseEntity<?> deleteSection(@PathVariable String sectionId){
-            sectionService.deleteById(Long.parseLong(sectionId));
+    public ResponseEntity<?> delete(@PathVariable Long courseId,@PathVariable Long sectionId){
+            sectionService.deleteById(courseId, sectionId);
             return ResponseEntity.noContent().build();
     }
 }

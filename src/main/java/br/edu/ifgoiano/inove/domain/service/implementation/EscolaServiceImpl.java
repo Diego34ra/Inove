@@ -4,6 +4,7 @@ import br.edu.ifgoiano.inove.controller.exceptions.*;
 import br.edu.ifgoiano.inove.domain.model.Escola;
 import br.edu.ifgoiano.inove.domain.repository.EscolaRespository;
 import br.edu.ifgoiano.inove.domain.service.EscolaService;
+import br.edu.ifgoiano.inove.domain.utils.InoveUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -20,6 +21,9 @@ import java.util.Set;
 public class EscolaServiceImpl implements EscolaService {
     @Autowired
     private EscolaRespository escolaRespository;
+
+    @Autowired
+    private InoveUtils inoveUtils;
 
     @Override
     public List<Escola> list() {
@@ -42,21 +46,8 @@ public class EscolaServiceImpl implements EscolaService {
     @Transactional
     public Escola update(Long id, Escola escolaUpdate) {
         Escola escola = findById(id);
-        BeanUtils.copyProperties(escolaUpdate, escola, getNullPropertyNames(escolaUpdate));
+        BeanUtils.copyProperties(escolaUpdate, escola, inoveUtils.getNullPropertyNames(escolaUpdate));
         return escolaRespository.save(escola);
-    }
-
-    private String[] getNullPropertyNames(Object source) {
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
-        Set<String> emptyNames = new HashSet<>();
-        for (java.beans.PropertyDescriptor pd : pds) {
-            Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) emptyNames.add(pd.getName());
-        }
-        String[] result = new String[emptyNames.size()];
-        return emptyNames.toArray(result);
     }
 
     @Override

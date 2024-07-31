@@ -1,18 +1,18 @@
 package br.edu.ifgoiano.inove.domain.service;
 
+import br.edu.ifgoiano.inove.controller.dto.SecaoSimpleOutputDTO;
 import br.edu.ifgoiano.inove.domain.model.Secao;
-import br.edu.ifgoiano.inove.domain.model.Usuario;
 
 import java.util.List;
 
 public interface SecaoService {
-    List<Secao> list();
+    List<SecaoSimpleOutputDTO> list(Long courserId);
 
-    Secao findById(Long id);
+    Secao findById(Long courseId, Long sectionId);
 
-    Secao create (Secao newSection);
+    Secao create (Long courseId, Secao newSection);
 
-    Secao update (Long id, Secao section);
+    Secao update (Long courseId, Long sectionId, Secao newSection);
 
-    void deleteById(Long Id);
+    void deleteById(Long courseId, Long sectionId);
 }

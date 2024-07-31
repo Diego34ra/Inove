@@ -8,6 +8,7 @@ import br.edu.ifgoiano.inove.domain.model.Usuario;
 import br.edu.ifgoiano.inove.domain.model.UsuarioRole;
 import br.edu.ifgoiano.inove.domain.repository.UsuarioRepository;
 import br.edu.ifgoiano.inove.domain.service.UsuarioService;
+import br.edu.ifgoiano.inove.domain.utils.InoveUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -24,6 +25,9 @@ import java.util.Set;
 public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository userRespository;
+
+    @Autowired
+    private InoveUtils inoveUtils;
 
     @Override
     public List<Usuario> list() {
@@ -46,21 +50,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     public Usuario update(Long id, Usuario userUpdate) {
         Usuario user = findById(id);
-        BeanUtils.copyProperties(userUpdate, user, getNullPropertyNames(userUpdate));
+        BeanUtils.copyProperties(userUpdate, user, inoveUtils.getNullPropertyNames(userUpdate));
         return userRespository.save(user);
-    }
-
-    private String[] getNullPropertyNames(Object source) {
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
-        Set<String> emptyNames = new HashSet<>();
-        for (java.beans.PropertyDescriptor pd : pds) {
-            Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) emptyNames.add(pd.getName());
-        }
-        String[] result = new String[emptyNames.size()];
-        return emptyNames.toArray(result);
     }
 
     @Override
