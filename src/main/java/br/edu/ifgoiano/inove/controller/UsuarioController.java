@@ -1,5 +1,9 @@
 package br.edu.ifgoiano.inove.controller;
 
+import br.edu.ifgoiano.inove.controller.dto.AdminOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.DiscenteOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.InstrutorOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Escola;
@@ -20,24 +24,27 @@ public class UsuarioController {
     @Autowired
     private UsuarioService userService;
 
+    @Autowired
+    private MyModelMapper mapper;
+
     @GetMapping
     public List<Usuario> listUsers(){
         return userService.list();
     }
 
     @GetMapping("/admin")
-    public List<Usuario> listAdmins(){
-        return userService.listUserByRole(UsuarioRole.ADMINISTRATOR.name());
+    public List<AdminOutputDTO> listAdmins(){
+        return userService.listAdmins();
     }
 
     @GetMapping("/discente")
-    public List<Usuario> listStudents(){
-        return userService.listUserByRole(UsuarioRole.DISCENTE.name());
+    public List<DiscenteOutputDTO> listStudents(){
+        return userService.listStudents();
     }
 
     @GetMapping("/instrutor")
-    public List<Usuario> listInstructors(){
-        return userService.listUserByRole(UsuarioRole.INSTRUTOR.name());
+    public List<InstrutorOutputDTO> listInstructors(){
+        return userService.listInstructors();
     }
 
     @GetMapping("/{userId}")
@@ -52,21 +59,21 @@ public class UsuarioController {
     }
 
     @PostMapping("/admin")
-    public Usuario createAdmin(@RequestBody Usuario admin){
+    public AdminOutputDTO createAdmin(@RequestBody Usuario admin){
         admin.setTipo(UsuarioRole.ADMINISTRATOR);
-        return userService.create(admin);
+        return mapper.mapTo(userService.create(admin), AdminOutputDTO.class);
     }
 
     @PostMapping("/discente")
-    public Usuario createStudent(@RequestBody Usuario student){
+    public DiscenteOutputDTO createStudent(@RequestBody Usuario student){
         student.setTipo(UsuarioRole.DISCENTE);
-        return userService.create(student);
+        return mapper.mapTo(userService.create(student.getEscola().getId(), student), DiscenteOutputDTO.class);
     }
 
     @PostMapping("/instrutor")
-    public Usuario createInstructor(@RequestBody Usuario instructor){
+    public InstrutorOutputDTO createInstructor(@RequestBody Usuario instructor){
         instructor.setTipo(UsuarioRole.INSTRUTOR);
-        return userService.create(instructor);
+        return mapper.mapTo(userService.create(instructor), InstrutorOutputDTO.class);
     }
 
 

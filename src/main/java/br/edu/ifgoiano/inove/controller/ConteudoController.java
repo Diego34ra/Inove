@@ -21,11 +21,11 @@ public class ConteudoController {
     private ConteudoService contentService;
 
     @GetMapping
-    public List<ConteudoSimpleOutputDTO> list(@PathVariable Long courseId){
-        return contentService.list(courseId);
+    public List<ConteudoSimpleOutputDTO> list(@PathVariable Long sectionId){
+        return contentService.list(sectionId);
     }
 
-    @GetMapping("/{sectionId}")
+    @GetMapping("/{contentId}")
     public ResponseEntity<?> findOne(@PathVariable Long sectionId, @PathVariable Long contentId){
         try {
             Conteudo savedContent = contentService.findById(sectionId, contentId);
@@ -43,19 +43,19 @@ public class ConteudoController {
         return contentService.create(courseId, sectionId, newContent);
     }
 
-    @PutMapping("/{sectionId}")
-    public ResponseEntity<?> update(@PathVariable Long courseId,
-                                    @PathVariable Long sectionId,
-                                    @RequestBody Conteudo section){
-        Conteudo updatedContent = contentService.update(courseId, sectionId, section);
+    @PutMapping("/{contentId}")
+    public ResponseEntity<?> update(@PathVariable Long sectionId,
+                                    @PathVariable Long contentId,
+                                    @RequestBody Conteudo newContent){
+        Conteudo updatedContent = contentService.update(sectionId, contentId, newContent);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedContent);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{sectionId}")
-    public ResponseEntity<?> delete(@PathVariable Long courseId,@PathVariable Long sectionId){
-            contentService.deleteById(courseId, sectionId);
+    @DeleteMapping("/{contentId}")
+    public ResponseEntity<?> delete(@PathVariable Long sectionId,@PathVariable Long contentId){
+            contentService.deleteById(sectionId, contentId);
             return ResponseEntity.noContent().build();
     }
 }

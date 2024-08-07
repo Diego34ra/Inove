@@ -1,5 +1,9 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
+import br.edu.ifgoiano.inove.controller.dto.AdminOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.DiscenteOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.InstrutorOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
@@ -7,6 +11,7 @@ import br.edu.ifgoiano.inove.domain.model.Escola;
 import br.edu.ifgoiano.inove.domain.model.Usuario;
 import br.edu.ifgoiano.inove.domain.model.UsuarioRole;
 import br.edu.ifgoiano.inove.domain.repository.UsuarioRepository;
+import br.edu.ifgoiano.inove.domain.service.EscolaService;
 import br.edu.ifgoiano.inove.domain.service.UsuarioService;
 import br.edu.ifgoiano.inove.domain.utils.InoveUtils;
 import jakarta.transaction.Transactional;
@@ -27,6 +32,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     private UsuarioRepository userRespository;
 
     @Autowired
+    private EscolaService schoolService;
+
+    @Autowired
+    private MyModelMapper mapper;
+
+    @Autowired
     private InoveUtils inoveUtils;
 
     @Override
@@ -42,8 +53,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public Usuario create(Usuario user) {
-        return userRespository.save(user);
+    public Usuario create(Usuario newUser) {
+        return userRespository.save(newUser);
+    }
+
+    @Override
+    public Usuario create(Long schoolId, Usuario newUser) {
+        newUser.setEscola(schoolService.findById(schoolId));
+        return userRespository.save(newUser);
     }
 
     @Override
@@ -68,5 +85,23 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public List<Usuario> listUserByRole(String role) {
         return userRespository.findByTipoContaining(role);
+    }
+
+    @Override
+    public List<AdminOutputDTO> listAdmins() {
+        return mapper.toList(userRespository.findByTipoContaining(UsuarioRole.ADMINISTRATOR.name())
+                , AdminOutputDTO.class);
+    }
+
+    @Override
+    public List<DiscenteOutputDTO> listStudents() {
+        return mapper.toList(userRespository.findByTipoContaining(UsuarioRole.DISCENTE.name())
+                , DiscenteOutputDTO.class);
+    }
+
+    @Override
+    public List<InstrutorOutputDTO> listInstructors() {
+        return mapper.toList(userRespository.findByTipoContaining(UsuarioRole.INSTRUTOR.name())
+                , InstrutorOutputDTO.class);
     }
 }

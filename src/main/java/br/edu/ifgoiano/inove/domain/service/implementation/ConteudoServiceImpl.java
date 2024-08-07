@@ -1,12 +1,10 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
 import br.edu.ifgoiano.inove.controller.dto.ConteudoSimpleOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.SecaoSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Conteudo;
-import br.edu.ifgoiano.inove.domain.model.Secao;
 import br.edu.ifgoiano.inove.domain.repository.ConteudoRepository;
 import br.edu.ifgoiano.inove.domain.service.ConteudoService;
 import br.edu.ifgoiano.inove.domain.service.SecaoService;
@@ -24,7 +22,7 @@ public class ConteudoServiceImpl implements ConteudoService {
     @Autowired
     private ConteudoRepository contentRespository;
     @Autowired
-    private SecaoService sectionService;
+    private SecaoServiceImpl sectionService;
     @Autowired
     private MyModelMapper mapper;
 
@@ -38,23 +36,23 @@ public class ConteudoServiceImpl implements ConteudoService {
 
     @Override
     public Conteudo findById(Long sectionId, Long contentId) {
-        return contentRespository.findByIdAndSecaoId(sectionId, contentId)
+        return contentRespository.findByIdAndSecaoId(contentId, sectionId)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhum conteudo com esse id."));
     }
 
     @Override
     @Transactional
     public Conteudo create(Long courseId, Long sectionId, Conteudo newContent) {
-        newContent.setSecao(sectionService.findById(courseId, sectionId));
+        newContent.setSecao(sectionService.findByIdAndCursoId(courseId, sectionId));
         return contentRespository.save(newContent);
     }
 
     @Override
     @Transactional
     public Conteudo update(Long sectionId, Long contentId, Conteudo newContent) {
-        Conteudo content = findById(sectionId, contentId);
-        BeanUtils.copyProperties(newContent, content, inoveUtils.getNullPropertyNames(newContent));
-        return contentRespository.save(content);
+        Conteudo savedContent = findById(sectionId, contentId);
+        BeanUtils.copyProperties(newContent, savedContent, inoveUtils.getNullPropertyNames(newContent));
+        return contentRespository.save(savedContent);
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.util.List;
 public interface SecaoService {
     List<SecaoSimpleOutputDTO> list(Long courserId);
 
-    Secao findById(Long courseId, Long sectionId);
+    SecaoSimpleOutputDTO getOne(Long courseId, Long sectionId);
 
     Secao create (Long courseId, Secao newSection);
 

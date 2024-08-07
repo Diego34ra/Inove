@@ -4,7 +4,6 @@ import br.edu.ifgoiano.inove.controller.dto.SecaoSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
-import br.edu.ifgoiano.inove.domain.model.Curso;
 import br.edu.ifgoiano.inove.domain.model.Secao;
 import br.edu.ifgoiano.inove.domain.repository.SecaoRepository;
 import br.edu.ifgoiano.inove.domain.service.CursoService;
@@ -35,9 +34,14 @@ public class SecaoServiceImpl implements SecaoService {
         return mapper.toList(sectionRespository.findByCursoId(courseId), SecaoSimpleOutputDTO.class);
     }
 
-    @Override
-    public Secao findById(Long courseId, Long sectionId) {
-        return sectionRespository.findByIdAndCursoId(courseId, sectionId)
+    public SecaoSimpleOutputDTO getOne(Long courseId, Long sectionId) {
+        Secao section = sectionRespository.findByIdAndCursoId(sectionId, courseId)
+                .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhuma seção com esse id."));
+        return mapper.mapTo(section,SecaoSimpleOutputDTO.class);
+    }
+
+    protected Secao findByIdAndCursoId(Long courseId, Long sectionId) {
+        return sectionRespository.findByIdAndCursoId(sectionId, courseId)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhuma seção com esse id."));
     }
 
@@ -51,7 +55,7 @@ public class SecaoServiceImpl implements SecaoService {
     @Override
     @Transactional
     public Secao update(Long courseId, Long sectionId, Secao newSection) {
-        Secao section = findById(courseId, sectionId);
+        Secao section = findByIdAndCursoId(courseId, sectionId);
         BeanUtils.copyProperties(newSection, section, inoveUtils.getNullPropertyNames(newSection));
         return sectionRespository.save(section);
     }
@@ -60,7 +64,7 @@ public class SecaoServiceImpl implements SecaoService {
     @Transactional
     public void deleteById(Long courseId, Long sectionId) {
         try{
-            Secao section = findById(courseId, sectionId);
+            Secao section = findByIdAndCursoId(courseId, sectionId);
             sectionRespository.delete(section);
         } catch (DataIntegrityViolationException ex){
             throw new ResourceInUseException("O usuário de ID %d esta em uso e não pode ser removido.");
