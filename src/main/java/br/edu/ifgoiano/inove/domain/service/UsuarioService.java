@@ -1,8 +1,9 @@
 package br.edu.ifgoiano.inove.domain.service;
 
-import br.edu.ifgoiano.inove.domain.model.Escola;
+import br.edu.ifgoiano.inove.controller.dto.AdminOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.DiscenteOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.InstrutorOutputDTO;
 import br.edu.ifgoiano.inove.domain.model.Usuario;
-import br.edu.ifgoiano.inove.domain.model.UsuarioRole;
 
 import java.util.List;
 
@@ -13,9 +14,17 @@ public interface UsuarioService {
 
     Usuario create (Usuario newUser);
 
+    Usuario create (Long schoolId, Usuario newUser);
+
     Usuario update (Long id, Usuario user);
 
     void deleteById(Long Id);
 
     List<Usuario> listUserByRole(String role);
+
+    List<AdminOutputDTO> listAdmins();
+
+    List<DiscenteOutputDTO> listStudents();
+
+    List<InstrutorOutputDTO> listInstructors();
 }

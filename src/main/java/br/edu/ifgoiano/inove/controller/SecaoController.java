@@ -2,7 +2,6 @@ package br.edu.ifgoiano.inove.controller;
 
 import br.edu.ifgoiano.inove.controller.dto.SecaoSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
-import br.edu.ifgoiano.inove.domain.model.Escola;
 import br.edu.ifgoiano.inove.domain.model.Secao;
 import br.edu.ifgoiano.inove.domain.service.SecaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +26,8 @@ public class SecaoController {
     @GetMapping("/{sectionId}")
     public ResponseEntity<?> findOne(@PathVariable Long courseId, @PathVariable Long sectionId){
         try {
-            Secao savedSection = sectionService.findById(courseId, sectionId);
-
-            return ResponseEntity.status(HttpStatus.OK).body(savedSection);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    sectionService.getOne(courseId, sectionId));
         }catch(EscolaNotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
