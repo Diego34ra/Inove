@@ -1,6 +1,6 @@
 package br.edu.ifgoiano.inove.controller;
 
-import br.edu.ifgoiano.inove.controller.dto.ConteudoSimpleOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ConteudoSimpleOutputDTO;
 import br.edu.ifgoiano.inove.domain.model.Conteudo;
 import br.edu.ifgoiano.inove.domain.model.Curso;
 import br.edu.ifgoiano.inove.domain.service.CursoService;
