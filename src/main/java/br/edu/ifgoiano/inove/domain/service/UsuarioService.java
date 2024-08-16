@@ -1,8 +1,7 @@
 package br.edu.ifgoiano.inove.domain.service;
 
-import br.edu.ifgoiano.inove.controller.dto.AdminOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.UserOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.DiscenteOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.InstrutorOutputDTO;
 import br.edu.ifgoiano.inove.domain.model.Usuario;
 
 import java.util.List;
@@ -22,9 +21,9 @@ public interface UsuarioService {
 
     List<Usuario> listUserByRole(String role);
 
-    List<AdminOutputDTO> listAdmins();
+    List<UserOutputDTO> listAdmins();
 
     List<DiscenteOutputDTO> listStudents();
 
-    List<InstrutorOutputDTO> listInstructors();
+    List<UserOutputDTO> listInstructors();
 }

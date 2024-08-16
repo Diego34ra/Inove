@@ -12,3 +12,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+springdoc:
+  swagger-ui:
+    tags-sorter: method
+    operations-sorter: alpha
