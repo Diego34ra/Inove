@@ -1,13 +1,10 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
-import br.edu.ifgoiano.inove.controller.dto.AdminOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.UserOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.DiscenteOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.InstrutorOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
-import br.edu.ifgoiano.inove.controller.exceptions.EscolaInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
-import br.edu.ifgoiano.inove.domain.model.Escola;
 import br.edu.ifgoiano.inove.domain.model.Usuario;
 import br.edu.ifgoiano.inove.domain.model.UsuarioRole;
 import br.edu.ifgoiano.inove.domain.repository.UsuarioRepository;
@@ -16,15 +13,11 @@ import br.edu.ifgoiano.inove.domain.service.UsuarioService;
 import br.edu.ifgoiano.inove.domain.utils.InoveUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -60,7 +53,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario create(Long schoolId, Usuario newUser) {
         newUser.setEscola(schoolService.findById(schoolId));
-        return userRespository.save(newUser);
+        Usuario savedUser = userRespository.save(newUser);
+        return savedUser;
     }
 
     @Override
@@ -88,9 +82,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<AdminOutputDTO> listAdmins() {
+    public List<UserOutputDTO> listAdmins() {
         return mapper.toList(userRespository.findByTipoContaining(UsuarioRole.ADMINISTRATOR.name())
-                , AdminOutputDTO.class);
+                , UserOutputDTO.class);
     }
 
     @Override
@@ -100,8 +94,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<InstrutorOutputDTO> listInstructors() {
+    public List<UserOutputDTO> listInstructors() {
         return mapper.toList(userRespository.findByTipoContaining(UsuarioRole.INSTRUTOR.name())
-                , InstrutorOutputDTO.class);
+                , UserOutputDTO.class);
     }
 }

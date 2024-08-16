@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InstrutorOutputDTO {
+public class UserOutputDTO {
 
     private Long id;
 

@@ -1,19 +1,20 @@
 package br.edu.ifgoiano.inove.controller;
 
-import br.edu.ifgoiano.inove.controller.dto.AdminOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.UserOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.DiscenteOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.InstrutorOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
-import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
-import br.edu.ifgoiano.inove.domain.model.Escola;
-import br.edu.ifgoiano.inove.domain.model.Usuario;
-import br.edu.ifgoiano.inove.domain.model.UsuarioRole;
+import br.edu.ifgoiano.inove.domain.model.*;
 import br.edu.ifgoiano.inove.domain.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,27 +29,60 @@ public class UsuarioController {
     private MyModelMapper mapper;
 
     @GetMapping
+    @Operation(summary = "Listar Usuarios")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Usuarios listados com sucesso.",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Usuario.class)))}),
+            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
     public List<Usuario> listUsers(){
         return userService.list();
     }
 
     @GetMapping("/admin")
-    public List<AdminOutputDTO> listAdmins(){
+    @Operation(summary = "Listar Adiministradores")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Adiministradores listados com sucesso.",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = UserOutputDTO.class)))}),
+            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
+    public List<UserOutputDTO> listAdmins(){
         return userService.listAdmins();
     }
 
     @GetMapping("/discente")
+    @Operation(summary = "Listar discentes")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Discentes listados com sucesso.",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = DiscenteOutputDTO.class)))}),
+            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
     public List<DiscenteOutputDTO> listStudents(){
         return userService.listStudents();
     }
 
     @GetMapping("/instrutor")
-    public List<InstrutorOutputDTO> listInstructors(){
+    @Operation(summary = "Listar instrutores")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Instrutores listados com sucesso.",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = UserOutputDTO.class)))}),
+            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
+    public List<UserOutputDTO> listInstructors(){
         return userService.listInstructors();
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> findEscola(@PathVariable String userId){
+    @Operation(summary = "Buscar um usuario")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Usuario encontrado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Usuario.class))}),
+            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
+    public ResponseEntity<?> findUser(@PathVariable String userId){
         try {
             Usuario savedUser = userService.findById(Long.parseLong(userId));
 
@@ -58,10 +92,15 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping("/admin")
-    public AdminOutputDTO createAdmin(@RequestBody Usuario admin){
+    @PostMapping
+    @Operation(summary = "Cria um usuario interno.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Usuario adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Curso.class))}),
+            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
+    public UserOutputDTO createAdmin(@RequestBody Usuario admin){
         admin.setTipo(UsuarioRole.ADMINISTRATOR);
-        return mapper.mapTo(userService.create(admin), AdminOutputDTO.class);
+        return mapper.mapTo(userService.create(admin), UserOutputDTO.class);
     }
 
     @PostMapping("/discente")
@@ -70,14 +109,12 @@ public class UsuarioController {
         return mapper.mapTo(userService.create(student.getEscola().getId(), student), DiscenteOutputDTO.class);
     }
 
-    @PostMapping("/instrutor")
-    public InstrutorOutputDTO createInstructor(@RequestBody Usuario instructor){
-        instructor.setTipo(UsuarioRole.INSTRUTOR);
-        return mapper.mapTo(userService.create(instructor), InstrutorOutputDTO.class);
-    }
-
-
     @PutMapping("/{userId}")
+    @Operation(summary = "Atualiza um usuario")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Usuario atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Usuario.class))}),
+            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody Usuario user){
         Usuario updatedEscola = userService.update(userId, user);
 
@@ -86,6 +123,11 @@ public class UsuarioController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{userId}")
+    @Operation(summary = "Remove um curso")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Curso deletado com sucesso."),
+            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
     public ResponseEntity<?> deleteUser(@PathVariable String userId){
             userService.deleteById(Long.parseLong(userId));
             return ResponseEntity.noContent().build();

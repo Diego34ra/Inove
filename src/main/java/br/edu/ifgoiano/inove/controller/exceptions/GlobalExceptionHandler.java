@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Date;
 
 @ControllerAdvice
@@ -18,6 +19,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetails> notFoundException(ResourceNotFoundException ex, WebRequest webRequest){
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErrorDetails errorDetails = new ErrorDetails(new Date(),status.value(), ex.getMessage(), getRequestPath());
+        return ResponseEntity.status(status).body(errorDetails);
+    }
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<ErrorDetails> notFoundException(SQLIntegrityConstraintViolationException ex, WebRequest webRequest){
         HttpStatus status = HttpStatus.NOT_FOUND;
         ErrorDetails errorDetails = new ErrorDetails(new Date(),status.value(), ex.getMessage(), getRequestPath());
         return ResponseEntity.status(status).body(errorDetails);
