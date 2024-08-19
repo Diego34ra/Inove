@@ -1,0 +1,23 @@
+use inove;
+
+create table tb_admin_curso (admin_id bigint not null, curso_id bigint not null) engine=InnoDB;
+create table tb_conteudo (conteudo_id bigint not null auto_increment, descricao varchar(255), referencia varchar(255), titulo varchar(255), secao_id bigint, primary key (conteudo_id)) engine=InnoDB;
+create table tb_curso (curso_id bigint not null auto_increment, descricao varchar(255), nome varchar(255), primary key (curso_id)) engine=InnoDB;
+create table tb_discente_curso (discente_id bigint not null, curso_id bigint not null) engine=InnoDB;
+create table tb_escola (escola_id bigint not null auto_increment, cidade varchar(255), estado varchar(255), nome varchar(255), primary key (escola_id)) engine=InnoDB;
+create table tb_feedback (feedback_id bigint not null auto_increment, comentario varchar(255), curso_id bigint, primary key (feedback_id)) engine=InnoDB;
+create table tb_instrutor_curso (instrutor_id bigint not null, curso_id bigint not null) engine=InnoDB;
+create table tb_secao (secao_id bigint not null auto_increment, descricao varchar(255), titulo varchar(255), curso_id bigint, primary key (secao_id)) engine=InnoDB;
+create table tb_usuario (usuario_id bigint not null auto_increment, cpf varchar(255) not null, date_nasc datetime(6), email varchar(255) not null, nome varchar(255) not null, senha varchar(255) not null, tipo enum ('ADMINISTRATOR','DISCENTE','INSTRUTOR'), escola_id bigint, primary key (usuario_id)) engine=InnoDB;
+alter table tb_usuario add constraint UK_594wib8ansybtilla48x7vdld unique (cpf);
+alter table tb_usuario add constraint UK_spmnyb4dsul95fjmr5kmdmvub unique (email);
+alter table tb_admin_curso add constraint FKfl8qws2wo7f4r1d2cnijr6g1j foreign key (curso_id) references tb_curso (curso_id);
+alter table tb_admin_curso add constraint FKcqh4imvhek6do30cmw4dd35ty foreign key (admin_id) references tb_usuario (usuario_id);
+alter table tb_conteudo add constraint FKpguxye7bt73f6amm2cjpobihx foreign key (secao_id) references tb_secao (secao_id);
+alter table tb_discente_curso add constraint FKlc23thrcsy0nllipgr46jvh4m foreign key (curso_id) references tb_curso (curso_id);
+alter table tb_discente_curso add constraint FKd2ugisqr0ktw8bidduqpfa23y foreign key (discente_id) references tb_usuario (usuario_id);
+alter table tb_feedback add constraint FK6vwtflp2fikyq2dvknc2nb2nf foreign key (curso_id) references tb_curso (curso_id);
+alter table tb_instrutor_curso add constraint FK5ohkugk2uup8w5o2tg1aey5sl foreign key (curso_id) references tb_curso (curso_id);
+alter table tb_instrutor_curso add constraint FKo6ei5tjqco9x3r5ptp89dfwdp foreign key (instrutor_id) references tb_usuario (usuario_id);
+alter table tb_secao add constraint FK9tnbm9a1m8ymo4hganbqlqgs0 foreign key (curso_id) references tb_curso (curso_id);
+alter table tb_usuario add constraint FKl6xf89ek47jkiqnmxdlg3vhqv foreign key (escola_id) references tb_escola (escola_id);
