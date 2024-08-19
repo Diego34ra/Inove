@@ -1,10 +1,7 @@
 package br.edu.ifgoiano.inove.controller;
 
-import br.edu.ifgoiano.inove.controller.dto.ConteudoSimpleOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.SecaoSimpleOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.sectionDTOs.SecaoSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
-import br.edu.ifgoiano.inove.domain.model.Conteudo;
-import br.edu.ifgoiano.inove.domain.model.Curso;
 import br.edu.ifgoiano.inove.domain.model.Secao;
 import br.edu.ifgoiano.inove.domain.service.SecaoService;
 import io.swagger.v3.oas.annotations.Operation;

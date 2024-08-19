@@ -1,7 +1,7 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
-import br.edu.ifgoiano.inove.controller.dto.UserOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.DiscenteOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.DiscenteOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;

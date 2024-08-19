@@ -1,4 +1,4 @@
-package br.edu.ifgoiano.inove.controller.dto;
+package br.edu.ifgoiano.inove.controller.dto.request.contentDTOs;
 
 import br.edu.ifgoiano.inove.domain.model.Secao;
 import com.fasterxml.jackson.annotation.JsonIgnore;

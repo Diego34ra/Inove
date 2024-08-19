@@ -1,4 +1,4 @@
-package br.edu.ifgoiano.inove.controller.dto;
+package br.edu.ifgoiano.inove.controller.dto.request.courseDTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

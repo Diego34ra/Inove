@@ -1,9 +1,7 @@
-package br.edu.ifgoiano.inove.controller.dto;
+package br.edu.ifgoiano.inove.controller.dto.request.userDTOs;
 
-import br.edu.ifgoiano.inove.domain.model.Escola;
+import br.edu.ifgoiano.inove.controller.dto.request.schoolDTOs.EscolaOutputDTO;
 import br.edu.ifgoiano.inove.domain.model.UsuarioRole;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

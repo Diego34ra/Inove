@@ -1,13 +1,12 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
-import br.edu.ifgoiano.inove.controller.dto.ConteudoSimpleOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ConteudoSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Conteudo;
 import br.edu.ifgoiano.inove.domain.repository.ConteudoRepository;
 import br.edu.ifgoiano.inove.domain.service.ConteudoService;
-import br.edu.ifgoiano.inove.domain.service.SecaoService;
 import br.edu.ifgoiano.inove.domain.utils.InoveUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;

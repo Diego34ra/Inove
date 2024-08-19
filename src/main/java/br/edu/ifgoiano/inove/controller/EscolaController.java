@@ -1,9 +1,6 @@
 package br.edu.ifgoiano.inove.controller;
 
-import br.edu.ifgoiano.inove.controller.dto.ConteudoSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
-import br.edu.ifgoiano.inove.domain.model.Conteudo;
-import br.edu.ifgoiano.inove.domain.model.Curso;
 import br.edu.ifgoiano.inove.domain.model.Escola;
 import br.edu.ifgoiano.inove.domain.service.EscolaService;
 import io.swagger.v3.oas.annotations.Operation;

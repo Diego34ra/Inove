@@ -1,4 +1,4 @@
-package br.edu.ifgoiano.inove.controller.dto;
+package br.edu.ifgoiano.inove.controller.dto.request.userDTOs;
 
 import br.edu.ifgoiano.inove.domain.model.UsuarioRole;
 import lombok.AllArgsConstructor;

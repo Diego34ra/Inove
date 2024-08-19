@@ -1,11 +1,8 @@
 package br.edu.ifgoiano.inove.controller;
 
-import br.edu.ifgoiano.inove.controller.dto.ConteudoSimpleOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.SecaoSimpleOutputDTO;
-import br.edu.ifgoiano.inove.controller.exceptions.ErrorDetails;
+import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ConteudoSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Conteudo;
-import br.edu.ifgoiano.inove.domain.model.Secao;
 import br.edu.ifgoiano.inove.domain.service.ConteudoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
