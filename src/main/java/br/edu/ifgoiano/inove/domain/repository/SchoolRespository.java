@@ -1,9 +1,9 @@
 package br.edu.ifgoiano.inove.domain.repository;
 
-import br.edu.ifgoiano.inove.domain.model.Escola;
+import br.edu.ifgoiano.inove.domain.model.School;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EscolaRespository extends JpaRepository<Escola,Long> {
+public interface SchoolRespository extends JpaRepository<School,Long> {
 }

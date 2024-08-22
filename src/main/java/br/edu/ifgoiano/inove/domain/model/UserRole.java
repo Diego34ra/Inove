@@ -5,13 +5,13 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum UsuarioRole {
+public enum UserRole {
 
-    DISCENTE,
-    INSTRUTOR,
+    STUDENT,
+    INSTRUCTOR,
     ADMINISTRATOR;
 
-    public static UsuarioRole getPadrao(){
-        return DISCENTE;
+    public static UserRole getDefault(){
+        return STUDENT;
     }
 }

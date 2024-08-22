@@ -1,11 +1,11 @@
 package br.edu.ifgoiano.inove.controller;
 
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.DiscenteOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.*;
-import br.edu.ifgoiano.inove.domain.service.UsuarioService;
+import br.edu.ifgoiano.inove.domain.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,9 +21,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/inove/usuarios")
-public class UsuarioController {
+public class UserController {
     @Autowired
-    private UsuarioService userService;
+    private UserService userService;
 
     @Autowired
     private MyModelMapper mapper;
@@ -33,10 +33,10 @@ public class UsuarioController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuarios listados com sucesso.",
                     content = { @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Usuario.class)))}),
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public List<Usuario> listUsers(){
+    public List<User> listUsers(){
         return userService.list();
     }
 
@@ -57,10 +57,10 @@ public class UsuarioController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Discentes listados com sucesso.",
                     content = { @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = DiscenteOutputDTO.class)))}),
+                            array = @ArraySchema(schema = @Schema(implementation = StudentOutputDTO.class)))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public List<DiscenteOutputDTO> listStudents(){
+    public List<StudentOutputDTO> listStudents(){
         return userService.listStudents();
     }
 
@@ -79,12 +79,12 @@ public class UsuarioController {
     @GetMapping("/{userId}")
     @Operation(summary = "Buscar um usuario")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Usuario encontrado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Usuario.class))}),
+            @ApiResponse(responseCode = "200", description = "Usuario encontrado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> findUser(@PathVariable String userId){
         try {
-            Usuario savedUser = userService.findById(Long.parseLong(userId));
+            User savedUser = userService.findById(Long.parseLong(userId));
 
             return ResponseEntity.status(HttpStatus.OK).body(savedUser);
         }catch(ResourceNotFoundException ex){
@@ -95,28 +95,28 @@ public class UsuarioController {
     @PostMapping
     @Operation(summary = "Cria um usuario interno.")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Usuario adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Curso.class))}),
+            @ApiResponse(responseCode = "201", description = "Usuario adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Course.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public UserOutputDTO createAdmin(@RequestBody Usuario admin){
-        admin.setTipo(UsuarioRole.ADMINISTRATOR);
+    public UserOutputDTO createAdmin(@RequestBody User admin){
+        admin.setRole(UserRole.ADMINISTRATOR);
         return mapper.mapTo(userService.create(admin), UserOutputDTO.class);
     }
 
     @PostMapping("/discente")
-    public DiscenteOutputDTO createStudent(@RequestBody Usuario student){
-        student.setTipo(UsuarioRole.DISCENTE);
-        return mapper.mapTo(userService.create(student.getEscola().getId(), student), DiscenteOutputDTO.class);
+    public StudentOutputDTO createStudent(@RequestBody User student){
+        student.setRole(UserRole.STUDENT);
+        return mapper.mapTo(userService.create(student.getSchool().getId(), student), StudentOutputDTO.class);
     }
 
     @PutMapping("/{userId}")
     @Operation(summary = "Atualiza um usuario")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Usuario atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Usuario.class))}),
+            @ApiResponse(responseCode = "200", description = "Usuario atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody Usuario user){
-        Usuario updatedEscola = userService.update(userId, user);
+    public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody User user){
+        User updatedEscola = userService.update(userId, user);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedEscola);
     }
