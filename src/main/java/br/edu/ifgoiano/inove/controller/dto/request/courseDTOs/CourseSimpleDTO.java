@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CursoSimpleDTO {
+public class CourseSimpleDTO {
     private Long id;
 
-    private String nome;
+    private String name;
 }

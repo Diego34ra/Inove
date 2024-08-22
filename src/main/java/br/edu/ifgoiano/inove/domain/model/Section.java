@@ -4,23 +4,26 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
+@Entity
 @Getter
 @Setter
-@Entity
-@Table(name = "tb_feedback")
-public class FeedBack {
+@Table(name = "tb_section")
+public class Section {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "student_id")
-    private User student;
+    private String title;
+
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
 
-    private String comment;
-
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "section")
+    private List<Content> contents;
 }

@@ -5,24 +5,22 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name = "tb_conteudo")
 @Getter
 @Setter
-public class Conteudo {
+@Entity
+@Table(name = "tb_content")
+public class Content {
 
     @Id
-    @Column(name = "conteudo_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String descricao;
+    private String description;
 
-    private String referencia;
-
-    private String titulo;
+    private String title;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "secao_id")
-    private Secao secao;
+    @JoinColumn(name = "section_id")
+    private Section section;
 }

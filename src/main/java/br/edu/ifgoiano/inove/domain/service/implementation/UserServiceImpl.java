@@ -1,15 +1,15 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.DiscenteOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
-import br.edu.ifgoiano.inove.domain.model.Usuario;
-import br.edu.ifgoiano.inove.domain.model.UsuarioRole;
-import br.edu.ifgoiano.inove.domain.repository.UsuarioRepository;
-import br.edu.ifgoiano.inove.domain.service.EscolaService;
-import br.edu.ifgoiano.inove.domain.service.UsuarioService;
+import br.edu.ifgoiano.inove.domain.model.User;
+import br.edu.ifgoiano.inove.domain.model.UserRole;
+import br.edu.ifgoiano.inove.domain.repository.UserRepository;
+import br.edu.ifgoiano.inove.domain.service.SchoolService;
+import br.edu.ifgoiano.inove.domain.service.UserService;
 import br.edu.ifgoiano.inove.domain.utils.InoveUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
@@ -20,12 +20,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UsuarioServiceImpl implements UsuarioService {
+public class UserServiceImpl implements UserService {
     @Autowired
-    private UsuarioRepository userRespository;
+    private UserRepository userRespository;
 
     @Autowired
-    private EscolaService schoolService;
+    private SchoolService schoolService;
 
     @Autowired
     private MyModelMapper mapper;
@@ -34,33 +34,33 @@ public class UsuarioServiceImpl implements UsuarioService {
     private InoveUtils inoveUtils;
 
     @Override
-    public List<Usuario> list() {
+    public List<User> list() {
         return userRespository.findAll();
     }
 
     @Override
-    public Usuario findById(Long id) {
+    public User findById(Long id) {
         return userRespository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhum usuario com esse id."));
     }
 
     @Override
     @Transactional
-    public Usuario create(Usuario newUser) {
+    public User create(User newUser) {
         return userRespository.save(newUser);
     }
 
     @Override
-    public Usuario create(Long schoolId, Usuario newUser) {
-        newUser.setEscola(schoolService.findById(schoolId));
-        Usuario savedUser = userRespository.save(newUser);
+    public User create(Long schoolId, User newUser) {
+        newUser.setSchool(schoolService.findById(schoolId));
+        User savedUser = userRespository.save(newUser);
         return savedUser;
     }
 
     @Override
     @Transactional
-    public Usuario update(Long id, Usuario userUpdate) {
-        Usuario user = findById(id);
+    public User update(Long id, User userUpdate) {
+        User user = findById(id);
         BeanUtils.copyProperties(userUpdate, user, inoveUtils.getNullPropertyNames(userUpdate));
         return userRespository.save(user);
     }
@@ -69,7 +69,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     public void deleteById(Long id) {
         try{
-            Usuario user = findById(id);
+            User user = findById(id);
             userRespository.delete(user);
         } catch (DataIntegrityViolationException ex){
             throw new ResourceInUseException("O usuário de ID %d esta em uso e não pode ser removido.");
@@ -77,25 +77,25 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<Usuario> listUserByRole(String role) {
-        return userRespository.findByTipoContaining(role);
+    public List<User> listUserByRole(String role) {
+        return userRespository.findByRole(role);
     }
 
     @Override
     public List<UserOutputDTO> listAdmins() {
-        return mapper.toList(userRespository.findByTipoContaining(UsuarioRole.ADMINISTRATOR.name())
+        return mapper.toList(userRespository.findByRole(UserRole.ADMINISTRATOR.name())
                 , UserOutputDTO.class);
     }
 
     @Override
-    public List<DiscenteOutputDTO> listStudents() {
-        return mapper.toList(userRespository.findByTipoContaining(UsuarioRole.DISCENTE.name())
-                , DiscenteOutputDTO.class);
+    public List<StudentOutputDTO> listStudents() {
+        return mapper.toList(userRespository.findByRole(UserRole.STUDENT.name())
+                , StudentOutputDTO.class);
     }
 
     @Override
     public List<UserOutputDTO> listInstructors() {
-        return mapper.toList(userRespository.findByTipoContaining(UsuarioRole.INSTRUTOR.name())
+        return mapper.toList(userRespository.findByRole(UserRole.INSTRUCTOR.name())
                 , UserOutputDTO.class);
     }
 }

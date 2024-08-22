@@ -9,10 +9,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
-public class SecaoSimpleOutputDTO {
+public class SectionSimpleOutputDTO {
     private Long id;
 
-    private String titulo;
+    private String title;
 
-    private String descricao;
+    private String description;
 }

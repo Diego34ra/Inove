@@ -6,22 +6,22 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Entity (name = "tb_escola")
+@Entity
 @Getter
 @Setter
-public class Escola {
+@Table(name = "tb_school")
+public class School {
 
     @Id
-    @Column(name = "escola_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
+    private String name;
 
-    private String cidade;
+    private String city;
 
-    private String estado;
+    private String federativeUnit;
 
-    @OneToMany(mappedBy = "escola")
-    private List<Usuario> dicentes;
+    @OneToMany(mappedBy = "school")
+    private List<User> student;
 }
