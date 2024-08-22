@@ -13,6 +13,10 @@ public class FeedBack {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany
+    @JoinColumn(name = "usuario_id")
+    private Usuario dicente;
+
     @ManyToOne
     @JoinColumn(name = "curso_id")
     private Curso curso;
