@@ -34,7 +34,8 @@ public class SectionServiceImpl implements SectionService {
         return mapper.toList(sectionRespository.findByCourseId(courseId), SectionSimpleOutputDTO.class);
     }
 
-    public SectionSimpleOutputDTO getOne(Long courseId, Long sectionId) {
+    @Override
+    public SectionSimpleOutputDTO findOne(Long courseId, Long sectionId) {
         Section section = sectionRespository.findByIdAndCourseId(sectionId, courseId)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhuma seção com esse id."));
         return mapper.mapTo(section, SectionSimpleOutputDTO.class);
@@ -49,6 +50,7 @@ public class SectionServiceImpl implements SectionService {
     @Transactional
     public Section create(Long courseId, Section newSection) {
         newSection.setCourse(courseService.findById(courseId));
+        courseService.saveUpdateDate(courseId);
         return sectionRespository.save(newSection);
     }
 
@@ -56,6 +58,7 @@ public class SectionServiceImpl implements SectionService {
     @Transactional
     public Section update(Long courseId, Long sectionId, Section newSection) {
         Section section = findByIdAndCursoId(courseId, sectionId);
+        courseService.saveUpdateDate(courseId);
         BeanUtils.copyProperties(newSection, section, inoveUtils.getNullPropertyNames(newSection));
         return sectionRespository.save(section);
     }

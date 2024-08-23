@@ -27,7 +27,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String passworld;
+    private String password;
 
     private Date birthDate;
 

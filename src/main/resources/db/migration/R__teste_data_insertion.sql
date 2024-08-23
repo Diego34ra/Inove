@@ -14,7 +14,7 @@ INSERT INTO tb_school (id, city, federative_unit, name) VALUES
 (2, "Orizona", "GO", "Francelino"),
 (3, "Pires do Rio", "GO", "Estadual");
 
-INSERT INTO tb_user (id, birth_date, cpf, email, name, passworld, role, school_id) VALUES
+INSERT INTO tb_user (id, birth_date, cpf, email, name, password, role, school_id) VALUES
 (1, '2003-09-25', '12345678901', 'flavio@gmail.com', 'Flávio', '123', 'ADMINISTRATOR', null),
 (2, '2003-01-12', '23456789012', 'joao@gmail.com', 'João Gabriel', '123', 'ADMINISTRATOR', null),
 (3, '1990-03-11', '34567890123', 'diego@gmail.com', 'Diego', '123', 'INSTRUCTOR', null),

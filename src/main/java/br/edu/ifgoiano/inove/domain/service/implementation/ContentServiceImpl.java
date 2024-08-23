@@ -7,6 +7,7 @@ import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Content;
 import br.edu.ifgoiano.inove.domain.repository.ContentRepository;
 import br.edu.ifgoiano.inove.domain.service.ContentService;
+import br.edu.ifgoiano.inove.domain.service.CourseService;
 import br.edu.ifgoiano.inove.domain.utils.InoveUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +23,10 @@ public class ContentServiceImpl implements ContentService {
     private ContentRepository contentRespository;
     @Autowired
     private SectionServiceImpl sectionService;
+
+    @Autowired
+    private CourseService courseService;
+
     @Autowired
     private MyModelMapper mapper;
 
@@ -43,13 +48,15 @@ public class ContentServiceImpl implements ContentService {
     @Transactional
     public Content create(Long courseId, Long sectionId, Content newContent) {
         newContent.setSection(sectionService.findByIdAndCursoId(courseId, sectionId));
+        courseService.saveUpdateDate(courseId);
         return contentRespository.save(newContent);
     }
 
     @Override
     @Transactional
-    public Content update(Long sectionId, Long contentId, Content newContent) {
+    public Content update(Long courseId, Long sectionId, Long contentId, Content newContent) {
         Content savedContent = findById(sectionId, contentId);
+        courseService.saveUpdateDate(courseId);
         BeanUtils.copyProperties(newContent, savedContent, inoveUtils.getNullPropertyNames(newContent));
         return contentRespository.save(savedContent);
     }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -18,6 +20,10 @@ public class Course {
     private String name;
 
     private String description;
+
+    private LocalDateTime creationDate;
+
+    private LocalDateTime lastUpdateDate;
 
     @ManyToMany
     @JoinTable(name = "tb_student_course",

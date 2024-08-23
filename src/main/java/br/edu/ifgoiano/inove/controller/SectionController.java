@@ -45,7 +45,7 @@ public class SectionController {
     public ResponseEntity<?> findOne(@PathVariable Long courseId, @PathVariable Long sectionId){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(
-                    sectionService.getOne(courseId, sectionId));
+                    sectionService.findOne(courseId, sectionId));
         }catch(EscolaNotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
