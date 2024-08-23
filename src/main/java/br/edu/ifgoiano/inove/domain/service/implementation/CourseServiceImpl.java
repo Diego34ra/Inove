@@ -9,6 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,8 +23,9 @@ public class CourseServiceImpl implements CourseService {
     private InoveUtils inoveUtils;
 
     @Override
-    public Course create(Course curso) {
-        return cursoRepository.save(curso);
+    public Course create(Course course) {
+        course.setCreationDate(LocalDateTime.now());
+        return cursoRepository.save(course);
     }
 
     @Override
@@ -31,20 +34,28 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course findById(Long id) {
-        return cursoRepository.findById(id)
+    public Course findById(Long courseId) {
+        return cursoRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum curso com esse id."));
     }
 
     @Override
-    public Course update(Long id, Course cursoUpdate) {
-        Course curso = findById(id);
-        BeanUtils.copyProperties(cursoUpdate, curso, inoveUtils.getNullPropertyNames(cursoUpdate));
-        return cursoRepository.save(curso);
+    public Course update(Long courseId, Course course) {
+        Course savedCourse = findById(courseId);
+        savedCourse.setLastUpdateDate(LocalDateTime.now());
+        BeanUtils.copyProperties(course, savedCourse, inoveUtils.getNullPropertyNames(course));
+        return cursoRepository.save(savedCourse);
     }
 
     @Override
-    public void delete(Long id) {
-        cursoRepository.deleteById(id);
+    public void delete(Long courseId) {
+        cursoRepository.deleteById(courseId);
+    }
+
+    @Override
+    public Course saveUpdateDate(Long courseId) {
+        Course course = findById(courseId);
+        course.setLastUpdateDate(LocalDateTime.now());
+        return cursoRepository.save(course);
     }
 }

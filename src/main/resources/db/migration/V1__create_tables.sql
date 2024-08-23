@@ -8,7 +8,7 @@ create table tb_instructor_course (instructor_id bigint not null, course_id bigi
 create table tb_school (id bigint not null auto_increment, city varchar(255), federative_unit varchar(255), name varchar(255), primary key (id)) engine=InnoDB;
 create table tb_section (id bigint not null auto_increment, description varchar(255), title varchar(255), course_id bigint, primary key (id)) engine=InnoDB;
 create table tb_student_course (student_id bigint not null, course_id bigint not null) engine=InnoDB;
-create table tb_user (id bigint not null auto_increment, birth_date datetime(6), cpf varchar(255) not null, email varchar(255) not null, name varchar(255) not null, passworld varchar(255) not null, role enum ('ADMINISTRATOR','INSTRUCTOR','STUDENT'), school_id bigint, primary key (id)) engine=InnoDB;
+create table tb_user (id bigint not null auto_increment, birth_date datetime(6), cpf varchar(255) not null, email varchar(255) not null, name varchar(255) not null, password varchar(255) not null, role enum ('ADMINISTRATOR','INSTRUCTOR','STUDENT'), school_id bigint, primary key (id)) engine=InnoDB;
 alter table tb_feedback add constraint UK_7h94xafctgk9f5dnjrsbex0nu unique (student_id);
 alter table tb_user add constraint UK_869sa3rebuf3nm0d4jwxdtouk unique (cpf);
 alter table tb_user add constraint UK_4vih17mube9j7cqyjlfbcrk4m unique (email);

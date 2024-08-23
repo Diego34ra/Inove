@@ -12,7 +12,7 @@ public interface ContentService {
 
     Content create (Long courseId, Long sectionId, Content newContent);
 
-    Content update (Long sectionId, Long contentId, Content newContent);
+    Content update (Long courseId, Long sectionId, Long contentId, Content newContent);
 
     void deleteById(Long sectionId, Long contentId);
 }

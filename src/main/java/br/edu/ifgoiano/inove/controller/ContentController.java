@@ -69,10 +69,11 @@ public class ContentController {
             @ApiResponse(responseCode = "200", description = "Coteudo atualizado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = Content.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<?> update(@PathVariable Long sectionId,
+    public ResponseEntity<?> update(@PathVariable Long courseId,
+                                    @PathVariable Long sectionId,
                                     @PathVariable Long contentId,
                                     @RequestBody Content newContent){
-        Content updatedContent = contentService.update(sectionId, contentId, newContent);
+        Content updatedContent = contentService.update(courseId, sectionId, contentId, newContent);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedContent);
     }
