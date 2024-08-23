@@ -3,6 +3,7 @@ package br.edu.ifgoiano.inove.controller;
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.*;
 import br.edu.ifgoiano.inove.domain.service.UserService;
@@ -36,7 +37,7 @@ public class UserController {
                             array = @ArraySchema(schema = @Schema(implementation = User.class)))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public List<User> listUsers(){
+    public List<UserSimpleOutputDTO> listUsers(){
         return userService.list();
     }
 

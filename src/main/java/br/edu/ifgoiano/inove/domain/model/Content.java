@@ -19,6 +19,12 @@ public class Content {
 
     private String title;
 
+    @Embedded
+    private VideoContent video;
+
+    @Embedded
+    private TheoricalContent theoricalContent;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "section_id")

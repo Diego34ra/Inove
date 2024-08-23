@@ -1,5 +1,7 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
+import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.inove.controller.dto.request.schoolDTOs.SchoolOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.*;
 import br.edu.ifgoiano.inove.domain.model.School;
 import br.edu.ifgoiano.inove.domain.repository.SchoolRespository;
@@ -19,17 +21,22 @@ public class SchoolServiceImpl implements SchoolService {
     private SchoolRespository escolaRespository;
 
     @Autowired
+    private MyModelMapper mapper;
+
+    @Autowired
     private InoveUtils inoveUtils;
 
     @Override
-    public List<School> list() {
-        return escolaRespository.findAll();
+    public List<SchoolOutputDTO> list() {
+        return mapper.toList(escolaRespository.findAll(), SchoolOutputDTO.class);
     }
 
+
     @Override
-    public School findById(Long id) {
-        return escolaRespository.findById(id)
+    public SchoolOutputDTO findOneById(Long id) {
+        School school = escolaRespository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhuma escola com esse id."));
+        return mapper.mapTo(school, SchoolOutputDTO.class);
     }
 
     @Override
@@ -55,5 +62,11 @@ public class SchoolServiceImpl implements SchoolService {
         } catch (DataIntegrityViolationException ex){
             throw new ResourceInUseException("O usuário de ID %d esta em uso e não pode ser removido.");
         }
+    }
+
+    @Override
+    public School findById(Long id) {
+        return escolaRespository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhuma escola com esse id."));
     }
 }

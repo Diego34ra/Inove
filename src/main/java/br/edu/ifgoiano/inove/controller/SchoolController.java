@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.inove.controller;
 
+import br.edu.ifgoiano.inove.controller.dto.request.schoolDTOs.SchoolOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.School;
 import br.edu.ifgoiano.inove.domain.service.SchoolService;
@@ -31,7 +32,7 @@ public class SchoolController {
                             array = @ArraySchema(schema = @Schema(implementation = School.class)))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public List<School> list(){
+    public List<SchoolOutputDTO> list(){
         return schoolService.list();
     }
 
@@ -43,7 +44,7 @@ public class SchoolController {
     })
     public ResponseEntity<?> findOne(@PathVariable String schoolId){
         try {
-            School savedSchool = schoolService.findById(Long.parseLong(schoolId));
+            SchoolOutputDTO savedSchool = schoolService.findOneById(Long.parseLong(schoolId));
 
             return ResponseEntity.status(HttpStatus.OK).body(savedSchool);
         }catch(EscolaNotFoundException ex){
