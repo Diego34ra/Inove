@@ -1,13 +1,13 @@
 USE inove;
 
-DELETE FROM tb_school;
-DELETE FROM tb_user;
-DELETE FROM tb_course;
+DELETE FROM tb_feedback;
+DELETE FROM tb_content;
+DELETE FROM tb_section;
 DELETE FROM tb_admin_course;
 DELETE FROM tb_instructor_course;
-DELETE FROM tb_section;
-DELETE FROM tb_content;
-DELETE FROM tb_feedback;
+DELETE FROM tb_user;
+DELETE FROM tb_school;
+DELETE FROM tb_course;
 
 INSERT INTO tb_school (id, city, federative_unit, name) VALUES
 (1, "Orizona", "GO", "MABEV"),

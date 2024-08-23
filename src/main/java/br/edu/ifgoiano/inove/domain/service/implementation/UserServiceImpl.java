@@ -3,6 +3,7 @@ package br.edu.ifgoiano.inove.domain.service.implementation;
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.User;
@@ -34,8 +35,8 @@ public class UserServiceImpl implements UserService {
     private InoveUtils inoveUtils;
 
     @Override
-    public List<User> list() {
-        return userRespository.findAll();
+    public List<UserSimpleOutputDTO> list() {
+        return mapper.toList(userRespository.findAll(), UserSimpleOutputDTO.class);
     }
 
     @Override
