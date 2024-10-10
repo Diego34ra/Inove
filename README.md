@@ -1,6 +1,6 @@
 # INOVE
 
-Inovação Online para Vivências Educacionais
+## Inovação Online para Vivências Educacionais
 
 #### Contextualização
 
