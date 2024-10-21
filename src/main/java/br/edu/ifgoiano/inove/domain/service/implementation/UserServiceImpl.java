@@ -1,9 +1,8 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.*;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserSimpleOutputDTO;
+import br.edu.ifgoiano.inove.controller.exceptions.ResourceBadRequestException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.User;
@@ -16,6 +15,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +25,7 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserRepository userRespository;
+    private UserRepository userRepository;
 
     @Autowired
     private SchoolService schoolService;
@@ -36,26 +38,42 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserSimpleOutputDTO> list() {
-        return mapper.toList(userRespository.findAll(), UserSimpleOutputDTO.class);
+        return mapper.toList(userRepository.findAll(), UserSimpleOutputDTO.class);
     }
 
     @Override
     public User findById(Long id) {
-        return userRespository.findById(id)
+        return userRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhum usuario com esse id."));
     }
 
     @Override
     @Transactional
     public User create(User newUser) {
-        return userRespository.save(newUser);
+        return userRepository.save(newUser);
     }
 
     @Override
-    public User create(Long schoolId, User newUser) {
-        newUser.setSchool(schoolService.findById(schoolId));
-        User savedUser = userRespository.save(newUser);
-        return savedUser;
+    public UserDetailOutputDTO create(Long schoolId, UserInputDTO newUser) {
+
+       var userCreate = mapper.mapTo(newUser, User.class);
+
+       if (userCreate.getRole() == null)
+           userCreate.setRole(UserRole.STUDENT);
+
+       if (emailExists(newUser.getEmail()))
+           throw new ResourceBadRequestException("Esse email já está cadastrado!");
+
+       if(cpfExists(newUser.getCpf()))
+           throw new ResourceBadRequestException("Esse CPF á está cadastrado!");
+
+       String encryptedPasswrod = new BCryptPasswordEncoder().encode(newUser.getPassword());
+       userCreate.setPassword(encryptedPasswrod);
+
+       userCreate.setSchool(newUser.getSchool());
+
+       UserDetailOutputDTO userDTO = mapper.mapTo(userRepository.save(userCreate), UserDetailOutputDTO.class);
+       return userDTO;
     }
 
     @Override
@@ -63,7 +81,7 @@ public class UserServiceImpl implements UserService {
     public User update(Long id, User userUpdate) {
         User user = findById(id);
         BeanUtils.copyProperties(userUpdate, user, inoveUtils.getNullPropertyNames(userUpdate));
-        return userRespository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
@@ -71,7 +89,7 @@ public class UserServiceImpl implements UserService {
     public void deleteById(Long id) {
         try{
             User user = findById(id);
-            userRespository.delete(user);
+            userRepository.delete(user);
         } catch (DataIntegrityViolationException ex){
             throw new ResourceInUseException("O usuário de ID %d esta em uso e não pode ser removido.");
         }
@@ -79,24 +97,45 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> listUserByRole(String role) {
-        return userRespository.findByRole(role);
+        return userRepository.findByRole(role);
     }
 
     @Override
     public List<UserOutputDTO> listAdmins() {
-        return mapper.toList(userRespository.findByRole(UserRole.ADMINISTRATOR.name())
+        return mapper.toList(userRepository.findByRole(UserRole.ADMINISTRATOR.name())
                 , UserOutputDTO.class);
     }
 
     @Override
     public List<StudentOutputDTO> listStudents() {
-        return mapper.toList(userRespository.findByRole(UserRole.STUDENT.name())
+        return mapper.toList(userRepository.findByRole(UserRole.STUDENT.name())
                 , StudentOutputDTO.class);
     }
 
     @Override
     public List<UserOutputDTO> listInstructors() {
-        return mapper.toList(userRespository.findByRole(UserRole.INSTRUCTOR.name())
+        return mapper.toList(userRepository.findByRole(UserRole.INSTRUCTOR.name())
                 , UserOutputDTO.class);
+    }
+
+    @Override
+    public UserDetails findByEmail(String email) {
+        return null;
+    }
+
+
+    @Override
+    public boolean emailExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean cpfExists(String cpf) {
+        return userRepository.existsByCpf(cpf);
+    }
+
+    @Override
+    public UserDetails loadByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username);
     }
 }
