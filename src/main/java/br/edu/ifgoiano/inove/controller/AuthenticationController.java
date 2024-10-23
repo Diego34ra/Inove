@@ -74,9 +74,9 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailOutputDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Erro ao registrar usuário.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<UserDetailOutputDTO> create(@RequestBody @Valid UserInputDTO user, @RequestBody Long schoolId){
-        School school = schoolService.findById(schoolId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(school.getId(), user));
+    public ResponseEntity<UserDetailOutputDTO> create(@RequestBody @Valid UserInputDTO user){
+//        School school = schoolService.findById(schoolId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(1L, user));
     }
 
 }

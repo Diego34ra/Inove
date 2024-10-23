@@ -38,10 +38,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers(SWAGGER_WHITELIST).permitAll()
-                                .requestMatchers(HttpMethod.PUT, "/api/inove/auth").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/inove/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(accessDeniedException()))
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
+                        httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(accessDeniedException()))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -55,7 +56,6 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder(){
