@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.inove.controller;
 
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentInputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
@@ -105,9 +106,8 @@ public class UserController {
     }
 
     @PostMapping("/discente")
-    public StudentOutputDTO createStudent(@RequestBody User student){
-        student.setRole(UserRole.STUDENT);
-        return mapper.mapTo(userService.create(student.getSchool().getId(), student), StudentOutputDTO.class);
+    public StudentOutputDTO createStudent(@RequestBody StudentInputDTO studentDTO){
+        return userService.create(studentDTO.getSchool().getId(), studentDTO);
     }
 
     @PutMapping("/{userId}")

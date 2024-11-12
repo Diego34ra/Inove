@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.inove.domain.service;
 
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentInputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserSimpleOutputDTO;
@@ -14,7 +15,7 @@ public interface UserService {
 
     User create (User newUser);
 
-    User create (Long schoolId, User newUser);
+    StudentOutputDTO create (Long schoolId, StudentInputDTO newStudentDTO);
 
     User update (Long id, User user);
 

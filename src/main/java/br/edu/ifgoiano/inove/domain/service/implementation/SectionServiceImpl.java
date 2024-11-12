@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
+import br.edu.ifgoiano.inove.controller.dto.request.sectionDTOs.SectionInputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.sectionDTOs.SectionSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
@@ -48,15 +49,18 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     @Transactional
-    public Section create(Long courseId, Section newSection) {
-        newSection.setCourse(courseService.findById(courseId));
+    public Section create(Long courseId, SectionInputDTO newSectionDTO) {
+        Section section = mapper.mapTo(newSectionDTO, Section.class);
+        section.setCourse(courseService.findById(courseId));
         courseService.saveUpdateDate(courseId);
-        return sectionRespository.save(newSection);
+        return sectionRespository.save(section);
     }
 
     @Override
     @Transactional
-    public Section update(Long courseId, Long sectionId, Section newSection) {
+    public Section update(Long courseId, Long sectionId, SectionInputDTO newSectionDTO) {
+        Section newSection = mapper.mapTo(newSectionDTO, Section.class);
+
         Section section = findByIdAndCursoId(courseId, sectionId);
         courseService.saveUpdateDate(courseId);
         BeanUtils.copyProperties(newSection, section, inoveUtils.getNullPropertyNames(newSection));

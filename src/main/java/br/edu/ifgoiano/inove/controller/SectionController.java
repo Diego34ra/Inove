@@ -1,6 +1,8 @@
 package br.edu.ifgoiano.inove.controller;
 
+import br.edu.ifgoiano.inove.controller.dto.request.sectionDTOs.SectionInputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.sectionDTOs.SectionSimpleOutputDTO;
+import br.edu.ifgoiano.inove.controller.exceptions.ErrorDetails;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Section;
 import br.edu.ifgoiano.inove.domain.service.SectionService;
@@ -55,10 +57,10 @@ public class SectionController {
     @Operation(summary = "Cria uma seção")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Secao adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Section.class))}),
-            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public Section create(@PathVariable Long courseId, @RequestBody @Validated Section section){
-        return sectionService.create(courseId, section);
+    public Section create(@PathVariable Long courseId, @RequestBody @Validated SectionInputDTO sectionDTO){
+        return sectionService.create(courseId, sectionDTO);
     }
 
     @PutMapping("/{sectionId}")
@@ -67,8 +69,8 @@ public class SectionController {
             @ApiResponse(responseCode = "200", description = "Secao atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Section.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<?> update(@PathVariable Long courseId, @PathVariable Long sectionId, @RequestBody Section section){
-        Section updatedSection = sectionService.update(courseId, sectionId, section);
+    public ResponseEntity<?> update(@PathVariable Long courseId, @PathVariable Long sectionId, @RequestBody SectionInputDTO sectionDTO){
+        Section updatedSection = sectionService.update(courseId, sectionId, sectionDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedSection);
     }
