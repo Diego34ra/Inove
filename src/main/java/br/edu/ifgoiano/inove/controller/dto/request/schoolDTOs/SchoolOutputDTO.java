@@ -12,10 +12,8 @@ import lombok.Setter;
 public class SchoolOutputDTO {
 
     private Long id;
-
     private String name;
-
+    private String email;
     private String city;
-
     private String federativeUnit;
 }
