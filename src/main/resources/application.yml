@@ -28,3 +28,10 @@ springdoc:
   swagger-ui:
     tags-sorter: method
     operations-sorter: alpha
+aws:
+  s3:
+    bucket: inove-bucket-streaming
+    region: us-east-1
+  credentials:
+    accessKey: 
+    secretKey:

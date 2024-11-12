@@ -14,13 +14,15 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("api/inove/videos")
 public class VideoController {
 
     private final S3Client s3Client;
-    private static final String BUCKET_NAME = "seu-bucket-s3";
+
+    private static final String BUCKET_NAME = "inove-bucket-streaming";
 
     @Autowired
     public VideoController(S3Client s3Client) {
@@ -28,20 +30,15 @@ public class VideoController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadVideo(@RequestParam("file")MultipartFile file) {
-        try {
-            String filename = file.getOriginalFilename();
-            PutObjectRequest putObjectRequest =
-                    PutObjectRequest.builder()
-                    .bucket(BUCKET_NAME)
-                    .key(filename)
-                    .build();
-            s3Client.putObject(putObjectRequest, (Path) file.getInputStream());
-            return ResponseEntity.ok().body("Vídeo enviado com sucesso: " + filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao enviar vídeo!");
-        }
+    public ResponseEntity<String> uploadVideo(@RequestParam("file") MultipartFile file) {
+        String filename = file.getOriginalFilename();
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(BUCKET_NAME)
+                .key(filename)
+                .build();
+
+        s3Client.putObject(putObjectRequest, Paths.get(file.getOriginalFilename()));
+        return ResponseEntity.ok().body("Vídeo enviado com sucesso: " + filename);
     }
 
     @GetMapping("/{fileName:.+}")
@@ -50,7 +47,7 @@ public class VideoController {
                 .bucket(BUCKET_NAME)
                 .key(fileName)
                 .build();
-        ResponseInputStream responseInputStream = s3Client.getObject(getObjectRequest);
+        ResponseInputStream<?> responseInputStream = s3Client.getObject(getObjectRequest);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(new InputStreamResource(responseInputStream));
