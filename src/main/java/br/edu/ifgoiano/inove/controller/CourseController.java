@@ -63,7 +63,7 @@ public class CourseController {
             @ApiResponse(responseCode = "200", description = "Coteudo atualizado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = Content.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<Course> update(@PathVariable  Long id, @RequestBody Course curso){
+    public ResponseEntity<Course> update(@PathVariable  Long id, @RequestBody CourseInputDTO curso){
         return ResponseEntity.status(HttpStatus.OK).body(cursoService.update(id,curso));
     }
 
