@@ -5,6 +5,8 @@ import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserSimpleOutputDTO;
 import br.edu.ifgoiano.inove.domain.model.User;
+import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -13,7 +15,8 @@ public interface UserService {
 
     User findById(Long id);
 
-    User create (User newUser);
+    @Transactional
+    User create(User newUser);
 
     StudentOutputDTO create (Long schoolId, StudentInputDTO newStudentDTO);
 
@@ -28,4 +31,14 @@ public interface UserService {
     List<StudentOutputDTO> listStudents();
 
     List<UserOutputDTO> listInstructors();
+
+    UserDetails findByEmail(String email);
+
+    boolean emailExists(String email);
+
+    boolean cpfExists(String cpf);
+
+//    UserDetails loadByUsername(String username) throws UsernameNotFoundException;
+//
+//    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 }
