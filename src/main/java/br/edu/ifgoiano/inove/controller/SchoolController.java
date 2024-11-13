@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.inove.controller;
 
+import br.edu.ifgoiano.inove.controller.dto.request.schoolDTOs.SchoolInputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.schoolDTOs.SchoolOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.School;
@@ -58,7 +59,7 @@ public class SchoolController {
             @ApiResponse(responseCode = "201", description = "Escola adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = School.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public School create(@RequestBody @Validated School school){
+    public School create(@RequestBody @Validated SchoolInputDTO school){
         return schoolService.create(school);
     }
 
@@ -68,7 +69,7 @@ public class SchoolController {
             @ApiResponse(responseCode = "200", description = "Escola atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = School.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<?> update(@PathVariable Long schoolId, @RequestBody School school){
+    public ResponseEntity<?> update(@PathVariable Long schoolId, @RequestBody SchoolInputDTO school){
         School updatedSchool = schoolService.update(schoolId, school);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedSchool);

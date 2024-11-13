@@ -55,26 +55,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetailOutputDTO create(Long schoolId, UserInputDTO newUser) {
+    public StudentOutputDTO create(Long schoolId, StudentInputDTO newUserDTO) {
 
-       var userCreate = mapper.mapTo(newUser, User.class);
+       var userCreate = mapper.mapTo(newUserDTO, User.class);
 
        if (userCreate.getRole() == null)
            userCreate.setRole(UserRole.STUDENT);
 
-       if (emailExists(newUser.getEmail()))
+       if (emailExists(userCreate.getEmail()))
            throw new ResourceBadRequestException("Esse email já está cadastrado!");
 
-       if(cpfExists(newUser.getCpf()))
+       if(cpfExists(userCreate.getCpf()))
            throw new ResourceBadRequestException("Esse CPF á está cadastrado!");
 
-       String encryptedPasswrod = new BCryptPasswordEncoder().encode(newUser.getPassword());
+       String encryptedPasswrod = new BCryptPasswordEncoder().encode(userCreate.getPassword());
        userCreate.setPassword(encryptedPasswrod);
 
-       userCreate.setSchool(newUser.getSchool());
+       userCreate.setSchool(userCreate.getSchool());
 
-       UserDetailOutputDTO userDTO = mapper.mapTo(userRepository.save(userCreate), UserDetailOutputDTO.class);
-       return userDTO;
+       return mapper.mapTo(userRepository.save(userCreate), StudentOutputDTO.class);
     }
 
     @Override

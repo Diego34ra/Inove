@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
+import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentInputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
@@ -46,18 +47,20 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     @Transactional
-    public Content create(Long courseId, Long sectionId, Content newContent) {
-        newContent.setSection(sectionService.findByIdAndCursoId(courseId, sectionId));
+    public Content create(Long courseId, Long sectionId, ContentInputDTO newContentDTO) {
+        Content newContentModel = mapper.mapTo(newContentDTO,Content.class);
+        newContentModel.setSection(sectionService.findByIdAndCursoId(courseId, sectionId));
         courseService.saveUpdateDate(courseId);
-        return contentRespository.save(newContent);
+        return contentRespository.save(newContentModel);
     }
 
     @Override
     @Transactional
-    public Content update(Long courseId, Long sectionId, Long contentId, Content newContent) {
+    public Content update(Long courseId, Long sectionId, Long contentId, ContentInputDTO newContentDTO) {
+        Content newContentModel = mapper.mapTo(newContentDTO,Content.class);
         Content savedContent = findById(sectionId, contentId);
         courseService.saveUpdateDate(courseId);
-        BeanUtils.copyProperties(newContent, savedContent, inoveUtils.getNullPropertyNames(newContent));
+        BeanUtils.copyProperties(newContentModel, savedContent, inoveUtils.getNullPropertyNames(newContentModel));
         return contentRespository.save(savedContent);
     }
 

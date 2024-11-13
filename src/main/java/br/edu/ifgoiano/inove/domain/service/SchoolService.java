@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.inove.domain.service;
 
+import br.edu.ifgoiano.inove.controller.dto.request.schoolDTOs.SchoolInputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.schoolDTOs.SchoolOutputDTO;
 import br.edu.ifgoiano.inove.domain.model.School;
 
@@ -12,9 +13,9 @@ public interface SchoolService {
 
     School findById(Long id);
 
-    School create (School newEscola);
+    School create (SchoolInputDTO newSchoolDTO);
 
-    School update (Long id, School escola);
+    School update (Long id, SchoolInputDTO schoolDTO);
 
     void deleteById(Long Id);
 }

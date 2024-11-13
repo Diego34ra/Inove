@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.inove.controller;
 
 import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentSimpleOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.courseDTOs.CourseInputDTO;
 import br.edu.ifgoiano.inove.domain.model.Content;
 import br.edu.ifgoiano.inove.domain.model.Course;
 import br.edu.ifgoiano.inove.domain.service.CourseService;
@@ -29,7 +30,7 @@ public class CourseController {
             @ApiResponse(responseCode = "201", description = "Coteudo adicionado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = Course.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<Course> create(@RequestBody Course curso){
+    public ResponseEntity<Course> create(@RequestBody CourseInputDTO curso){
         var cursoCreated = cursoService.create(curso);
         return ResponseEntity.status(HttpStatus.CREATED).body(cursoCreated);
     }

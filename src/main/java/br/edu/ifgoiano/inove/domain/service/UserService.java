@@ -1,10 +1,12 @@
 package br.edu.ifgoiano.inove.domain.service;
 
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.*;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentInputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserSimpleOutputDTO;
 import br.edu.ifgoiano.inove.domain.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ public interface UserService {
     @Transactional
     User create(User newUser);
 
-    UserDetailOutputDTO create(Long schoolId, UserInputDTO newUser);
+    StudentOutputDTO create (Long schoolId, StudentInputDTO newStudentDTO);
 
     User update (Long id, User user);
 

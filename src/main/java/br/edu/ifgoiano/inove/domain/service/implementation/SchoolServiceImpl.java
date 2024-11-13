@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.inove.controller.dto.request.schoolDTOs.SchoolInputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.schoolDTOs.SchoolOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.*;
 import br.edu.ifgoiano.inove.domain.model.School;
@@ -41,16 +42,19 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     @Transactional
-    public School create(School escola) {
-        return escolaRespository.save(escola);
+    public School create(SchoolInputDTO newSchoolDTO) {
+        School school = mapper.mapTo(newSchoolDTO, School.class);
+        return escolaRespository.save(school);
     }
 
     @Override
     @Transactional
-    public School update(Long id, School escolaUpdate) {
-        School escola = findById(id);
-        BeanUtils.copyProperties(escolaUpdate, escola, inoveUtils.getNullPropertyNames(escolaUpdate));
-        return escolaRespository.save(escola);
+    public School update(Long id, SchoolInputDTO newSchoolDTO) {
+        School newSchool = mapper.mapTo(newSchoolDTO, School.class);
+
+        School savedSchool = findById(id);
+        BeanUtils.copyProperties(newSchool, savedSchool, inoveUtils.getNullPropertyNames(newSchool));
+        return escolaRespository.save(savedSchool);
     }
 
     @Override

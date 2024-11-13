@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.inove.controller;
 
+import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentInputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Content;
@@ -59,7 +60,7 @@ public class ContentController {
     })
     public Content create(@PathVariable Long courseId,
                           @PathVariable Long sectionId,
-                          @RequestBody @Validated Content newContent){
+                          @RequestBody @Validated ContentInputDTO newContent){
         return contentService.create(courseId, sectionId, newContent);
     }
 
@@ -72,7 +73,7 @@ public class ContentController {
     public ResponseEntity<?> update(@PathVariable Long courseId,
                                     @PathVariable Long sectionId,
                                     @PathVariable Long contentId,
-                                    @RequestBody Content newContent){
+                                    @RequestBody ContentInputDTO newContent){
         Content updatedContent = contentService.update(courseId, sectionId, contentId, newContent);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedContent);
