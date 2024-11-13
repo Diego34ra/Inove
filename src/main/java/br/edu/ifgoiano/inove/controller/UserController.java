@@ -1,10 +1,8 @@
 package br.edu.ifgoiano.inove.controller;
 
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentInputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.StudentOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.*;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.UserSimpleOutputDTO;
+import br.edu.ifgoiano.inove.controller.exceptions.ErrorDetails;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.*;
 import br.edu.ifgoiano.inove.domain.service.UserService;
@@ -14,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -94,18 +93,22 @@ public class UserController {
         }
     }
 
-    @PostMapping
-    @Operation(summary = "Cria um usuario interno.")
+    @PostMapping("/admin")
+    @Operation(summary = "Cria um Usuario Interno.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Usuario adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Course.class))}),
-            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public UserOutputDTO createAdmin(@RequestBody User admin){
-        admin.setRole(UserRole.ADMINISTRATOR);
+    public UserOutputDTO createAdmin(@RequestBody @Valid UserInputDTO admin){
         return mapper.mapTo(userService.create(admin), UserOutputDTO.class);
     }
 
     @PostMapping("/discente")
+    @Operation(summary = "Cria um discente na platforma.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Discente adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = StudentOutputDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+    })
     public StudentOutputDTO createStudent(@RequestBody StudentInputDTO studentDTO){
         return userService.create(studentDTO.getSchool().getId(), studentDTO);
     }
@@ -114,7 +117,7 @@ public class UserController {
     @Operation(summary = "Atualiza um usuario")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuario atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
-            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody User user){
         User updatedEscola = userService.update(userId, user);
@@ -127,7 +130,7 @@ public class UserController {
     @Operation(summary = "Remove um curso")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Curso deletado com sucesso."),
-            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+            @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> deleteUser(@PathVariable String userId){
             userService.deleteById(Long.parseLong(userId));
