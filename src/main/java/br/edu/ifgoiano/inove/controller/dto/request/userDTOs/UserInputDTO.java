@@ -22,7 +22,5 @@ public class UserInputDTO {
     @Email(message = "O email é inválido")
     private String email;
     private String password;
-    private Date birthDate;
-    private School school;
     private UserRole userRole;
 }

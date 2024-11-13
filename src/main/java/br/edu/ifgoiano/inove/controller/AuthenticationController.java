@@ -77,7 +77,6 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "400", description = "Erro ao registrar usuário.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<StudentOutputDTO> create(@RequestBody @Valid StudentInputDTO user){
-//        School school = schoolService.findById(schoolId);
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(1L, user));
     }
 

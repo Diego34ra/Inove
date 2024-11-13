@@ -50,11 +50,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public User create(User newUser) {
+    public User create(UserInputDTO newUserDTO) {
+        User newUser = mapper.mapTo(newUserDTO,User.class);
+
+        if (emailExists(newUser.getEmail()))
+            throw new ResourceBadRequestException("Esse email já está cadastrado!");
+
+        if(cpfExists(newUser.getCpf()))
+            throw new ResourceBadRequestException("Esse CPF á está cadastrado!");
+
+        String encryptedPasswrod = new BCryptPasswordEncoder().encode(newUser.getPassword());
+        newUser.setPassword(encryptedPasswrod);
+
         return userRepository.save(newUser);
     }
 
     @Override
+    @Transactional
     public StudentOutputDTO create(Long schoolId, StudentInputDTO newUserDTO) {
 
        var userCreate = mapper.mapTo(newUserDTO, User.class);
