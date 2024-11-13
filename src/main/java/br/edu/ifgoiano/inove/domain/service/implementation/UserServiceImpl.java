@@ -120,12 +120,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails findByEmail(String email) {
-        return null;
-    }
-
-
-    @Override
     public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);
     }
@@ -136,9 +130,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username);
+    public UserDetails findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
+//
+//    @Override
+//    public UserDetails loadByUsername(String username) throws UsernameNotFoundException {
+//        return userRepository.findByEmail(username);
+//    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

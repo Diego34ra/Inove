@@ -39,6 +39,9 @@ public class SecurityConfiguration {
                         authorize -> authorize
                                 .requestMatchers(SWAGGER_WHITELIST).permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/inove/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/inove/usuarios/discente").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/inove/usuarios/").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/inove/escolas/").permitAll()
                                 .requestMatchers(HttpMethod.POST, "api/inove/videos").permitAll()
                                 .anyRequest().authenticated()
                 )

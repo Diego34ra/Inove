@@ -36,5 +36,7 @@ public interface UserService {
 
     boolean cpfExists(String cpf);
 
-    UserDetails loadByUsername(String username) throws UsernameNotFoundException;
+//    UserDetails loadByUsername(String username) throws UsernameNotFoundException;
+//
+//    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 }
