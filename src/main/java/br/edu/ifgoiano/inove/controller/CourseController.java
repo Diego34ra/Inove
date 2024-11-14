@@ -2,6 +2,8 @@ package br.edu.ifgoiano.inove.controller;
 
 import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.courseDTOs.CourseInputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.courseDTOs.CourseOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.courseDTOs.CourseSimpleDTO;
 import br.edu.ifgoiano.inove.domain.model.Content;
 import br.edu.ifgoiano.inove.domain.model.Course;
 import br.edu.ifgoiano.inove.domain.service.CourseService;
@@ -27,10 +29,10 @@ public class CourseController {
     @PostMapping
     @Operation(summary = "Cria um curso")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Coteudo adicionado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = Course.class))}),
+            @ApiResponse(responseCode = "201", description = "Coteudo adicionado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = CourseOutputDTO.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<Course> create(@RequestBody CourseInputDTO curso){
+    public ResponseEntity<CourseOutputDTO> create(@RequestBody CourseInputDTO curso){
         var cursoCreated = cursoService.create(curso);
         return ResponseEntity.status(HttpStatus.CREATED).body(cursoCreated);
     }
@@ -40,30 +42,30 @@ public class CourseController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Cursos listados com sucesso.",
                     content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = ContentSimpleOutputDTO.class)))}),
+                            array = @ArraySchema(schema = @Schema(implementation = CourseSimpleDTO.class)))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<List<Course>> list(){
+    public ResponseEntity<List<CourseSimpleDTO>> list(){
         return ResponseEntity.status(HttpStatus.OK).body(cursoService.findAll());
     }
 
     @GetMapping("{id}")
     @Operation(summary = "Buscar um curso")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Coteudo encontrado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = Content.class))}),
+            @ApiResponse(responseCode = "200", description = "Coteudo encontrado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = CourseOutputDTO.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<Course> findOne(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.OK).body(cursoService.findById(id));
+    public ResponseEntity<CourseOutputDTO> findOne(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(cursoService.findOneById(id));
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Atualiza um curso")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Coteudo atualizado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = Content.class))}),
+            @ApiResponse(responseCode = "200", description = "Coteudo atualizado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = CourseOutputDTO.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<Course> update(@PathVariable  Long id, @RequestBody CourseInputDTO curso){
+    public ResponseEntity<CourseOutputDTO> update(@PathVariable  Long id, @RequestBody CourseInputDTO curso){
         return ResponseEntity.status(HttpStatus.OK).body(cursoService.update(id,curso));
     }
 

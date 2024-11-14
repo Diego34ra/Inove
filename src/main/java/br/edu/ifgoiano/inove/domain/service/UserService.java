@@ -12,17 +12,20 @@ public interface UserService {
 
     User findById(Long id);
 
+    UserOutputDTO findOneById(Long id);
+
     @Transactional
-    User create(UserInputDTO newUser);
+    UserOutputDTO create(UserInputDTO newUser);
 
     @Transactional
     StudentOutputDTO create (Long schoolId, StudentInputDTO newStudentDTO);
 
-    User update (Long id, User user);
+    @Transactional
+    UserOutputDTO update (Long id, User user);
 
     void deleteById(Long Id);
 
-    List<User> listUserByRole(String role);
+    List<UserSimpleOutputDTO> listUserByRole(String role);
 
     List<UserOutputDTO> listAdmins();
 
