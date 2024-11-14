@@ -1,0 +1,25 @@
+package br.edu.ifgoiano.inove.domain.service.implementation;
+
+import org.springframework.stereotype.Service;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+
+import java.io.File;
+
+@Service
+public class S3ServiceImpl {
+
+    private final S3Client s3Client;
+
+    public S3ServiceImpl(S3Client s3Client) {
+        this.s3Client = s3Client;
+    }
+
+    public void uploadFile(String bucketName, String keyName, File file) {
+        s3Client.putObject(PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(keyName)
+                .build(), RequestBody.fromFile(file));
+    }
+}
