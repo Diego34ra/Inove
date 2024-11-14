@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.inove.controller;
 
 import br.edu.ifgoiano.inove.controller.dto.request.sectionDTOs.SectionInputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.sectionDTOs.SectionOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.sectionDTOs.SectionSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.ErrorDetails;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
@@ -59,7 +60,7 @@ public class SectionController {
             @ApiResponse(responseCode = "201", description = "Secao adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Section.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public Section create(@PathVariable Long courseId, @RequestBody @Validated SectionInputDTO sectionDTO){
+    public SectionOutputDTO create(@PathVariable Long courseId, @RequestBody @Validated SectionInputDTO sectionDTO){
         return sectionService.create(courseId, sectionDTO);
     }
 
@@ -70,7 +71,7 @@ public class SectionController {
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> update(@PathVariable Long courseId, @PathVariable Long sectionId, @RequestBody SectionInputDTO sectionDTO){
-        Section updatedSection = sectionService.update(courseId, sectionId, sectionDTO);
+        SectionOutputDTO updatedSection = sectionService.update(courseId, sectionId, sectionDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedSection);
     }

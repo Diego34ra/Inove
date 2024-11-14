@@ -42,19 +42,19 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     @Transactional
-    public School create(SchoolInputDTO newSchoolDTO) {
+    public SchoolOutputDTO create(SchoolInputDTO newSchoolDTO) {
         School school = mapper.mapTo(newSchoolDTO, School.class);
-        return escolaRespository.save(school);
+        return mapper.mapTo(escolaRespository.save(school),SchoolOutputDTO.class);
     }
 
     @Override
     @Transactional
-    public School update(Long id, SchoolInputDTO newSchoolDTO) {
+    public SchoolOutputDTO update(Long id, SchoolInputDTO newSchoolDTO) {
         School newSchool = mapper.mapTo(newSchoolDTO, School.class);
 
         School savedSchool = findById(id);
         BeanUtils.copyProperties(newSchool, savedSchool, inoveUtils.getNullPropertyNames(newSchool));
-        return escolaRespository.save(savedSchool);
+        return mapper.mapTo(escolaRespository.save(savedSchool), SchoolOutputDTO.class);
     }
 
     @Override
