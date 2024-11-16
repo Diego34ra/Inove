@@ -23,6 +23,7 @@ import java.util.List;
 public class ContentServiceImpl implements ContentService {
     @Autowired
     private ContentRepository contentRespository;
+
     @Autowired
     private SectionServiceImpl sectionService;
 
@@ -55,11 +56,10 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     @Transactional
-    public ContentOutputDTO create(Long courseId, Long sectionId, ContentInputDTO newContentDTO) {
-        Content newContentModel = mapper.mapTo(newContentDTO,Content.class);
-        newContentModel.setSection(sectionService.findByIdAndCursoId(courseId, sectionId));
+    public ContentOutputDTO create(Long courseId, Long sectionId, Content newContent) {
+        newContent.setSection(sectionService.findByIdAndCursoId(courseId, sectionId));
         courseService.saveUpdateDate(courseId);
-        return mapper.mapTo(contentRespository.save(newContentModel), ContentOutputDTO.class);
+        return mapper.mapTo(contentRespository.save(newContent), ContentOutputDTO.class);
     }
 
     @Override

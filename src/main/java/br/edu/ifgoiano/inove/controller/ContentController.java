@@ -53,17 +53,17 @@ public class ContentController {
         }
     }
 
-    @PostMapping
-    @Operation(summary = "Adiciona um conteudo")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Coteudo adicionado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = Content.class))}),
-            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
-    })
-    public ContentOutputDTO create(@PathVariable Long courseId,
-                          @PathVariable Long sectionId,
-                          @RequestBody @Validated ContentInputDTO newContent){
-        return contentService.create(courseId, sectionId, newContent);
-    }
+//    @PostMapping
+//    @Operation(summary = "Adiciona um conteudo")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "201", description = "Coteudo adicionado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = Content.class))}),
+//            //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
+//    })
+//    public ContentOutputDTO create(@PathVariable Long courseId,
+//                          @PathVariable Long sectionId,
+//                          @RequestBody @Validated ContentInputDTO newContent){
+//        return contentService.create(courseId, sectionId, newContent);
+//    }
 
     @PutMapping("/{contentId}")
     @Operation(summary = "Atualiza um conteudo")
