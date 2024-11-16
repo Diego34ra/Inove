@@ -37,6 +37,12 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
+    public Section findById(Long sectionId) {
+        return sectionRespository.findById(sectionId)
+                .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhum conteudo com esse id."));
+    }
+
+    @Override
     public SectionOutputDTO findOne(Long courseId, Long sectionId) {
         Section section = sectionRespository.findByIdAndCourseId(sectionId, courseId)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhuma seção com esse id."));

@@ -10,6 +10,8 @@ import java.util.List;
 public interface SectionService {
     List<SectionSimpleOutputDTO> list(Long courserId);
 
+    Section findById(Long sectionId);
+
     SectionOutputDTO findOne(Long courseId, Long sectionId);
 
     SectionOutputDTO create (Long courseId, SectionInputDTO newSectionDTO);

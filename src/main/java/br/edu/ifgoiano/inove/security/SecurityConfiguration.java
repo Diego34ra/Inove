@@ -43,6 +43,8 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.POST, "/api/inove/usuarios/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/inove/escolas/").permitAll()
                                 .requestMatchers(HttpMethod.POST, "api/inove/videos").permitAll()
+                                .requestMatchers(HttpMethod.GET, "api/inove/videos/**").permitAll()
+//                                .requestMatchers(HttpMethod.POST, "/api/inove/cursos/{courseId}/secoes/{sectionId}/conteudos/videos/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
