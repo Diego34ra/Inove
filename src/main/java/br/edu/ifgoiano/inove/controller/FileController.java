@@ -2,10 +2,12 @@ package br.edu.ifgoiano.inove.controller;
 
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentInputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentSimpleInputDTO;
 import br.edu.ifgoiano.inove.domain.model.Content;
 import br.edu.ifgoiano.inove.domain.model.ContentType;
 import br.edu.ifgoiano.inove.domain.repository.ContentRepository;
 import br.edu.ifgoiano.inove.domain.service.ContentService;
+import br.edu.ifgoiano.inove.domain.service.FileService;
 import br.edu.ifgoiano.inove.domain.service.implementation.S3ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,45 +30,17 @@ import java.nio.file.StandardCopyOption;
 @RequestMapping("api/inove/videos")
 public class FileController {
 
-    private final S3ServiceImpl s3Service;
-
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucketName;
-
     @Autowired
-    private MyModelMapper mapper;
-
-    @Autowired
-    private ContentService contentService;
-
-    @Autowired
-    private ContentRepository contentRepository;
-
-    public FileController(S3ServiceImpl s3Service) {
-        this.s3Service = s3Service;
-    }
+    private FileService fileService;
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,
                                              @PathVariable Long courseId,
                                              @PathVariable Long sectionId,
-                                             @RequestBody ContentInputDTO dto) {
+                                             @RequestBody ContentSimpleInputDTO contentDTO) {
         try {
-            Path tempFile = Files.createTempFile("temp-", file.getOriginalFilename());
-            Files.copy(file.getInputStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
+            return ResponseEntity.ok(fileService.upload(file, courseId, sectionId, contentDTO));
 
-            String keyName = file.getOriginalFilename();
-            s3Service.uploadFile(bucketName, keyName, tempFile.toFile());
-
-            Files.delete(tempFile);
-
-            Content newContent = mapper.mapTo(dto, Content.class);
-            newContent.setFileUrl("https://" + bucketName + ".s3.amazonaws.com/" + keyName);
-            newContent.setFileName(keyName);
-
-//            contentRepository.create(courseId, sectionId, newContent);
-
-            return ResponseEntity.ok("File uploaded successfully to S3.");
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save the file temporarily.");
         } catch (Exception e) {
@@ -77,19 +51,12 @@ public class FileController {
     @GetMapping("/stream/{fileName}")
     public ResponseEntity<InputStreamResource> streamVideo(@PathVariable String fileName) {
         try {
-            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(fileName)
-                    .build();
-
-            InputStream videoStream = s3Service.getFileStream(getObjectRequest);
-
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("video/mp4"));
             headers.set("Content-Disposition", "inline; filename=\"" + fileName + "\"");
 
             return new ResponseEntity<>(
-                    new InputStreamResource(videoStream),
+                    new InputStreamResource(fileService.stream(fileName)),
                     headers,
                     HttpStatus.OK
             );
