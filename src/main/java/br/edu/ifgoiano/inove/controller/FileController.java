@@ -18,29 +18,29 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 @RestController
-@RequestMapping("api/inove/videos")
+@RequestMapping("api/inove/cursos/{courseId}/secoes/{sectionId}/conteudos/videos")
 public class FileController {
 
     @Autowired
     private FileService fileService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,
-                                             @PathVariable Long courseId,
+    public ResponseEntity<String> uploadFile(@PathVariable Long courseId,
                                              @PathVariable Long sectionId,
-                                             @RequestBody ContentSimpleInputDTO contentDTO) {
+                                             ContentSimpleInputDTO contentDTO) {
         try {
-            return ResponseEntity.ok(fileService.upload(file, courseId, sectionId, contentDTO));
+            return ResponseEntity.ok(fileService.upload(courseId, sectionId, contentDTO));
 
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save the file temporarily.");
         } catch (Exception e) {
+            System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload file to S3.");
         }
     }
 
     @GetMapping("/stream/{fileName}")
-    public ResponseEntity<InputStreamResource> streamVideo(@PathVariable String fileName) {
+    public ResponseEntity<?> streamVideo(@PathVariable String fileName) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType("video/mp4"));
@@ -52,7 +52,7 @@ public class FileController {
                     HttpStatus.OK
             );
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
