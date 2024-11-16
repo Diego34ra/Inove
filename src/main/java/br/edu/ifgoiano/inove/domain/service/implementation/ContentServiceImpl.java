@@ -23,6 +23,7 @@ import java.util.List;
 public class ContentServiceImpl implements ContentService {
     @Autowired
     private ContentRepository contentRespository;
+
     @Autowired
     private SectionServiceImpl sectionService;
 
