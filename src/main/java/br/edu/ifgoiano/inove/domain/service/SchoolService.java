@@ -13,9 +13,9 @@ public interface SchoolService {
 
     School findById(Long id);
 
-    School create (SchoolInputDTO newSchoolDTO);
+    SchoolOutputDTO create (SchoolInputDTO newSchoolDTO);
 
-    School update (Long id, SchoolInputDTO schoolDTO);
+    SchoolOutputDTO update (Long id, SchoolInputDTO schoolDTO);
 
     void deleteById(Long Id);
 }

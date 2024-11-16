@@ -83,9 +83,9 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Usuario encontrado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public ResponseEntity<?> findUser(@PathVariable String userId){
+    public ResponseEntity<?> findUser(@PathVariable Long userId){
         try {
-            User savedUser = userService.findById(Long.parseLong(userId));
+            UserOutputDTO savedUser = userService.findOneById(userId);
 
             return ResponseEntity.status(HttpStatus.OK).body(savedUser);
         }catch(ResourceNotFoundException ex){
@@ -96,7 +96,7 @@ public class UserController {
     @PostMapping("/admin")
     @Operation(summary = "Cria um Usuario Interno.")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Usuario adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Course.class))}),
+            @ApiResponse(responseCode = "201", description = "Usuario adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserOutputDTO.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public UserOutputDTO createAdmin(@RequestBody @Valid UserInputDTO admin){
@@ -116,11 +116,11 @@ public class UserController {
     @PutMapping("/{userId}")
     @Operation(summary = "Atualiza um usuario")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Usuario atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
+            @ApiResponse(responseCode = "200", description = "Usuario atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserOutputDTO.class))}),
             @ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody User user){
-        User updatedEscola = userService.update(userId, user);
+        UserOutputDTO updatedEscola = userService.update(userId, user);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedEscola);
     }

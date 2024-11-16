@@ -30,7 +30,7 @@ public class SchoolController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Cursos listados com sucesso.",
                     content = { @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = School.class)))}),
+                            array = @ArraySchema(schema = @Schema(implementation = SchoolOutputDTO.class)))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public List<SchoolOutputDTO> list(){
@@ -40,7 +40,7 @@ public class SchoolController {
     @GetMapping("/{schoolId}")
     @Operation(summary = "Buscar uma escola")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Escola encontrada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = School.class))}),
+            @ApiResponse(responseCode = "200", description = "Escola encontrada com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SchoolOutputDTO.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> findOne(@PathVariable String schoolId){
@@ -56,21 +56,21 @@ public class SchoolController {
     @PostMapping
     @Operation(summary = "Cria uma escola")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Escola adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = School.class))}),
+            @ApiResponse(responseCode = "201", description = "Escola adicionado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SchoolOutputDTO.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public School create(@RequestBody @Validated SchoolInputDTO school){
+    public SchoolOutputDTO create(@RequestBody @Validated SchoolInputDTO school){
         return schoolService.create(school);
     }
 
     @PutMapping("/{schoolId}")
     @Operation(summary = "Atualiza uma Escola")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Escola atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = School.class))}),
+            @ApiResponse(responseCode = "200", description = "Escola atualizado com sucesso.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = SchoolOutputDTO.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> update(@PathVariable Long schoolId, @RequestBody SchoolInputDTO school){
-        School updatedSchool = schoolService.update(schoolId, school);
+        SchoolOutputDTO updatedSchool = schoolService.update(schoolId, school);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedSchool);
     }

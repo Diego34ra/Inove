@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.inove.controller;
 
 import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentInputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
 import br.edu.ifgoiano.inove.domain.model.Content;
@@ -39,12 +40,12 @@ public class ContentController {
     @GetMapping("/{contentId}")
     @Operation(summary = "Buscar um conteudo")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Coteudo encontrado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = Content.class))}),
+            @ApiResponse(responseCode = "200", description = "Coteudo encontrado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = ContentOutputDTO.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> findOne(@PathVariable Long sectionId, @PathVariable Long contentId){
         try {
-            Content savedContent = contentService.findById(sectionId, contentId);
+            ContentOutputDTO savedContent = contentService.findOneById(sectionId, contentId);
 
             return ResponseEntity.status(HttpStatus.OK).body(savedContent);
         }catch(EscolaNotFoundException ex){
@@ -58,7 +59,7 @@ public class ContentController {
             @ApiResponse(responseCode = "201", description = "Coteudo adicionado com sucesso.",content = { @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json", schema = @Schema(implementation = Content.class))}),
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
-    public Content create(@PathVariable Long courseId,
+    public ContentOutputDTO create(@PathVariable Long courseId,
                           @PathVariable Long sectionId,
                           @RequestBody @Validated ContentInputDTO newContent){
         return contentService.create(courseId, sectionId, newContent);
@@ -74,7 +75,7 @@ public class ContentController {
                                     @PathVariable Long sectionId,
                                     @PathVariable Long contentId,
                                     @RequestBody ContentInputDTO newContent){
-        Content updatedContent = contentService.update(courseId, sectionId, contentId, newContent);
+        ContentOutputDTO updatedContent = contentService.update(courseId, sectionId, contentId, newContent);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedContent);
     }

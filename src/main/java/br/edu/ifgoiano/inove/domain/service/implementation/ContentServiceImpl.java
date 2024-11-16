@@ -1,6 +1,7 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
 import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentInputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
@@ -40,6 +41,13 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
+    public ContentOutputDTO findOneById(Long sectionId, Long contentId) {
+        var content = contentRespository.findByIdAndSectionId(contentId, sectionId)
+                .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhum conteudo com esse id."));
+        return mapper.mapTo(content, ContentOutputDTO.class);
+    }
+
+    @Override
     public Content findById(Long sectionId, Long contentId) {
         return contentRespository.findByIdAndSectionId(contentId, sectionId)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhum conteudo com esse id."));
@@ -47,21 +55,21 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     @Transactional
-    public Content create(Long courseId, Long sectionId, ContentInputDTO newContentDTO) {
+    public ContentOutputDTO create(Long courseId, Long sectionId, ContentInputDTO newContentDTO) {
         Content newContentModel = mapper.mapTo(newContentDTO,Content.class);
         newContentModel.setSection(sectionService.findByIdAndCursoId(courseId, sectionId));
         courseService.saveUpdateDate(courseId);
-        return contentRespository.save(newContentModel);
+        return mapper.mapTo(contentRespository.save(newContentModel), ContentOutputDTO.class);
     }
 
     @Override
     @Transactional
-    public Content update(Long courseId, Long sectionId, Long contentId, ContentInputDTO newContentDTO) {
+    public ContentOutputDTO update(Long courseId, Long sectionId, Long contentId, ContentInputDTO newContentDTO) {
         Content newContentModel = mapper.mapTo(newContentDTO,Content.class);
         Content savedContent = findById(sectionId, contentId);
         courseService.saveUpdateDate(courseId);
         BeanUtils.copyProperties(newContentModel, savedContent, inoveUtils.getNullPropertyNames(newContentModel));
-        return contentRespository.save(savedContent);
+        return mapper.mapTo(contentRespository.save(savedContent), ContentOutputDTO.class);
     }
 
     @Override

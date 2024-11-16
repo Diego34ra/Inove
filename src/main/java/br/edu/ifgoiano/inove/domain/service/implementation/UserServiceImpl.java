@@ -49,8 +49,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public UserOutputDTO findOneById(Long id) {
+        var user = userRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhum usuario com esse id."));
+        return mapper.mapTo(user, UserOutputDTO.class);
+    }
+
+    @Override
     @Transactional
-    public User create(UserInputDTO newUserDTO) {
+    public UserOutputDTO create(UserInputDTO newUserDTO) {
         User newUser = mapper.mapTo(newUserDTO,User.class);
 
         if (emailExists(newUser.getEmail()))
@@ -62,7 +69,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String encryptedPasswrod = new BCryptPasswordEncoder().encode(newUser.getPassword());
         newUser.setPassword(encryptedPasswrod);
 
-        return userRepository.save(newUser);
+        return mapper.mapTo(userRepository.save(newUser), UserOutputDTO.class);
     }
 
     @Override
@@ -90,10 +97,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional
-    public User update(Long id, User userUpdate) {
+    public UserOutputDTO update(Long id, User userUpdate) {
         User user = findById(id);
         BeanUtils.copyProperties(userUpdate, user, inoveUtils.getNullPropertyNames(userUpdate));
-        return userRepository.save(user);
+        return mapper.mapTo(userRepository.save(user), UserOutputDTO.class);
     }
 
     @Override
@@ -108,8 +115,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<User> listUserByRole(String role) {
-        return userRepository.findByRole(role);
+    public List<UserSimpleOutputDTO> listUserByRole(String role) {
+        return mapper.toList(userRepository.findByRole(role), UserSimpleOutputDTO.class);
     }
 
     @Override
