@@ -19,6 +19,12 @@ public class Content {
 
     private String title;
 
+    private ContentType contentType; // VIDEO, PDF
+
+    private String fileUrl; // URL do arquivo no S3
+
+    private String fileName; // Nome do arquivo no S3
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "section_id")
