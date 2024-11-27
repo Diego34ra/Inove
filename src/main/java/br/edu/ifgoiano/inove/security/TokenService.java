@@ -1,7 +1,7 @@
 package br.edu.ifgoiano.inove.security;
 
-import br.edu.ifgoiano.inove.controller.dto.request.LoginResponseDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.RefreshTokenDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.login.LoginResponseDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.auth.RefreshTokenDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceBadRequestException;
 import br.edu.ifgoiano.inove.domain.model.User;
 import br.edu.ifgoiano.inove.domain.service.UserService;

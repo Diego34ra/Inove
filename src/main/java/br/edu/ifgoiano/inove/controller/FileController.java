@@ -1,6 +1,6 @@
 package br.edu.ifgoiano.inove.controller;
 
-import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentSimpleInputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.content.ContentSimpleRequestDTO;
 import br.edu.ifgoiano.inove.domain.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -9,13 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 
 @RestController
 @RequestMapping("api/inove/cursos/{courseId}/secoes/{sectionId}/conteudos/videos")
@@ -27,7 +22,7 @@ public class FileController {
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@PathVariable Long courseId,
                                              @PathVariable Long sectionId,
-                                             ContentSimpleInputDTO contentDTO) {
+                                             ContentSimpleRequestDTO contentDTO) {
         try {
             return ResponseEntity.ok(fileService.upload(courseId, sectionId, contentDTO));
 

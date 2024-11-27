@@ -1,9 +1,8 @@
 package br.edu.ifgoiano.inove.controller;
 
-import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentInputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentSimpleOutputDTO;
-import br.edu.ifgoiano.inove.controller.exceptions.EscolaNotFoundException;
+import br.edu.ifgoiano.inove.controller.dto.request.content.ContentRequestDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.content.ContentOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.content.ContentSimpleOutputDTO;
 import br.edu.ifgoiano.inove.domain.model.Content;
 import br.edu.ifgoiano.inove.domain.service.ContentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,13 +42,9 @@ public class ContentController {
             //@ApiResponse(responseCode = "401", description = "Acesso negado.",content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDetails.class))})
     })
     public ResponseEntity<?> findOne(@PathVariable Long sectionId, @PathVariable Long contentId){
-        try {
-            ContentOutputDTO savedContent = contentService.findOneById(sectionId, contentId);
+        ContentOutputDTO savedContent = contentService.findOneById(sectionId, contentId);
 
-            return ResponseEntity.status(HttpStatus.OK).body(savedContent);
-        }catch(EscolaNotFoundException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(savedContent);
     }
 
 //    @PostMapping
@@ -74,7 +68,7 @@ public class ContentController {
     public ResponseEntity<?> update(@PathVariable Long courseId,
                                     @PathVariable Long sectionId,
                                     @PathVariable Long contentId,
-                                    @RequestBody ContentInputDTO newContent){
+                                    @RequestBody ContentRequestDTO newContent){
         ContentOutputDTO updatedContent = contentService.update(courseId, sectionId, contentId, newContent);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedContent);

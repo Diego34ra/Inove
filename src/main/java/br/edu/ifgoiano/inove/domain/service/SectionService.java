@@ -1,22 +1,22 @@
 package br.edu.ifgoiano.inove.domain.service;
 
-import br.edu.ifgoiano.inove.controller.dto.request.sectionDTOs.SectionInputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.sectionDTOs.SectionOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.sectionDTOs.SectionSimpleOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.section.SectionRequestDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.section.SectionResponseDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.section.SectionSimpleResponseDTO;
 import br.edu.ifgoiano.inove.domain.model.Section;
 
 import java.util.List;
 
 public interface SectionService {
-    List<SectionSimpleOutputDTO> list(Long courserId);
+    List<SectionSimpleResponseDTO> list(Long courserId);
 
     Section findById(Long sectionId);
 
-    SectionOutputDTO findOne(Long courseId, Long sectionId);
+    SectionResponseDTO findOne(Long courseId, Long sectionId);
 
-    SectionOutputDTO create (Long courseId, SectionInputDTO newSectionDTO);
+    SectionResponseDTO create (Long courseId, SectionRequestDTO newSectionDTO);
 
-    SectionOutputDTO update (Long courseId, Long sectionId, SectionInputDTO newSectionDTO);
+    SectionResponseDTO update (Long courseId, Long sectionId, SectionRequestDTO newSectionDTO);
 
     void deleteById(Long courseId, Long sectionId);
 }
