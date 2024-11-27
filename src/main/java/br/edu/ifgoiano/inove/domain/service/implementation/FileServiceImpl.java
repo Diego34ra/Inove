@@ -1,14 +1,12 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
-import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentSimpleInputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.content.ContentSimpleRequestDTO;
 import br.edu.ifgoiano.inove.domain.model.Content;
-import br.edu.ifgoiano.inove.domain.repository.ContentRepository;
 import br.edu.ifgoiano.inove.domain.service.ContentService;
 import br.edu.ifgoiano.inove.domain.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -37,7 +35,7 @@ public class FileServiceImpl implements FileService{
     private ContentService contentService;
 
     @Override
-    public String upload(Long courseId, Long sectionId, ContentSimpleInputDTO contentDTO) throws IOException {
+    public String upload(Long courseId, Long sectionId, ContentSimpleRequestDTO contentDTO) throws IOException {
         MultipartFile file = contentDTO.getFile();
 
         Path tempFile = Files.createTempFile("temp-", file.getOriginalFilename());

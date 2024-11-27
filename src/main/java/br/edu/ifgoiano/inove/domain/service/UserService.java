@@ -1,6 +1,9 @@
 package br.edu.ifgoiano.inove.domain.service;
 
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.*;
+import br.edu.ifgoiano.inove.controller.dto.request.user.*;
+import br.edu.ifgoiano.inove.controller.dto.response.user.StudentResponseDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.user.UserResponseDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.user.UserSimpleResponseDTO;
 import br.edu.ifgoiano.inove.domain.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,30 +11,30 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.List;
 
 public interface UserService {
-    List<UserSimpleOutputDTO> list();
+    List<UserSimpleResponseDTO> list();
 
     User findById(Long id);
 
-    UserOutputDTO findOneById(Long id);
+    UserResponseDTO findOneById(Long id);
 
     @Transactional
-    UserOutputDTO create(UserInputDTO newUser);
+    UserResponseDTO create(UserRequestDTO newUser);
 
     @Transactional
-    StudentOutputDTO create (Long schoolId, StudentInputDTO newStudentDTO);
+    StudentResponseDTO create (Long schoolId, StudentRequestDTO newStudentDTO);
 
     @Transactional
-    UserOutputDTO update (Long id, User user);
+    UserResponseDTO update (Long id, User user);
 
     void deleteById(Long Id);
 
-    List<UserSimpleOutputDTO> listUserByRole(String role);
+    List<UserSimpleResponseDTO> listUserByRole(String role);
 
-    List<UserOutputDTO> listAdmins();
+    List<UserResponseDTO> listAdmins();
 
-    List<StudentOutputDTO> listStudents();
+    List<StudentResponseDTO> listStudents();
 
-    List<UserOutputDTO> listInstructors();
+    List<UserResponseDTO> listInstructors();
 
     UserDetails findByEmail(String email);
 

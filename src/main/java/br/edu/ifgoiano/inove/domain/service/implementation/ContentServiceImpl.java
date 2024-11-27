@@ -1,8 +1,8 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
-import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentInputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.contentDTOs.ContentSimpleOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.content.ContentRequestDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.content.ContentOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.content.ContentSimpleOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
@@ -64,7 +64,7 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     @Transactional
-    public ContentOutputDTO update(Long courseId, Long sectionId, Long contentId, ContentInputDTO newContentDTO) {
+    public ContentOutputDTO update(Long courseId, Long sectionId, Long contentId, ContentRequestDTO newContentDTO) {
         Content newContentModel = mapper.mapTo(newContentDTO,Content.class);
         Content savedContent = findById(sectionId, contentId);
         courseService.saveUpdateDate(courseId);

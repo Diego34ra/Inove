@@ -1,8 +1,8 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
-import br.edu.ifgoiano.inove.controller.dto.request.schoolDTOs.SchoolInputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.schoolDTOs.SchoolOutputDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.school.SchoolRequestDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.school.SchoolResponseDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.*;
 import br.edu.ifgoiano.inove.domain.model.School;
 import br.edu.ifgoiano.inove.domain.repository.SchoolRespository;
@@ -28,33 +28,33 @@ public class SchoolServiceImpl implements SchoolService {
     private InoveUtils inoveUtils;
 
     @Override
-    public List<SchoolOutputDTO> list() {
-        return mapper.toList(escolaRespository.findAll(), SchoolOutputDTO.class);
+    public List<SchoolResponseDTO> list() {
+        return mapper.toList(escolaRespository.findAll(), SchoolResponseDTO.class);
     }
 
 
     @Override
-    public SchoolOutputDTO findOneById(Long id) {
+    public SchoolResponseDTO findOneById(Long id) {
         School school = escolaRespository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhuma escola com esse id."));
-        return mapper.mapTo(school, SchoolOutputDTO.class);
+        return mapper.mapTo(school, SchoolResponseDTO.class);
     }
 
     @Override
     @Transactional
-    public SchoolOutputDTO create(SchoolInputDTO newSchoolDTO) {
+    public SchoolResponseDTO create(SchoolRequestDTO newSchoolDTO) {
         School school = mapper.mapTo(newSchoolDTO, School.class);
-        return mapper.mapTo(escolaRespository.save(school),SchoolOutputDTO.class);
+        return mapper.mapTo(escolaRespository.save(school), SchoolResponseDTO.class);
     }
 
     @Override
     @Transactional
-    public SchoolOutputDTO update(Long id, SchoolInputDTO newSchoolDTO) {
+    public SchoolResponseDTO update(Long id, SchoolRequestDTO newSchoolDTO) {
         School newSchool = mapper.mapTo(newSchoolDTO, School.class);
 
         School savedSchool = findById(id);
         BeanUtils.copyProperties(newSchool, savedSchool, inoveUtils.getNullPropertyNames(newSchool));
-        return mapper.mapTo(escolaRespository.save(savedSchool), SchoolOutputDTO.class);
+        return mapper.mapTo(escolaRespository.save(savedSchool), SchoolResponseDTO.class);
     }
 
     @Override
