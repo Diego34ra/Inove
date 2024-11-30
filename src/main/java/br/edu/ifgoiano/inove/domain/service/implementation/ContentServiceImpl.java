@@ -10,6 +10,7 @@ import br.edu.ifgoiano.inove.domain.model.Content;
 import br.edu.ifgoiano.inove.domain.repository.ContentRepository;
 import br.edu.ifgoiano.inove.domain.service.ContentService;
 import br.edu.ifgoiano.inove.domain.service.CourseService;
+import br.edu.ifgoiano.inove.domain.service.SectionService;
 import br.edu.ifgoiano.inove.domain.utils.InoveUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
@@ -22,10 +23,10 @@ import java.util.List;
 @Service
 public class ContentServiceImpl implements ContentService {
     @Autowired
-    private ContentRepository contentRespository;
+    private ContentRepository contentRepository;
 
     @Autowired
-    private SectionServiceImpl sectionService;
+    private SectionService sectionService;
 
     @Autowired
     private CourseService courseService;
@@ -38,19 +39,19 @@ public class ContentServiceImpl implements ContentService {
 
     @Override
     public List<ContentSimpleOutputDTO> list(Long sectionId) {
-        return mapper.toList(contentRespository.findBySectionId(sectionId), ContentSimpleOutputDTO.class);
+        return mapper.toList(contentRepository.findBySectionId(sectionId), ContentSimpleOutputDTO.class);
     }
 
     @Override
     public ContentOutputDTO findOneById(Long sectionId, Long contentId) {
-        var content = contentRespository.findByIdAndSectionId(contentId, sectionId)
+        var content = contentRepository.findByIdAndSectionId(contentId, sectionId)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhum conteudo com esse id."));
         return mapper.mapTo(content, ContentOutputDTO.class);
     }
 
     @Override
     public Content findById(Long sectionId, Long contentId) {
-        return contentRespository.findByIdAndSectionId(contentId, sectionId)
+        return contentRepository.findByIdAndSectionId(contentId, sectionId)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhum conteudo com esse id."));
     }
 
@@ -59,7 +60,7 @@ public class ContentServiceImpl implements ContentService {
     public ContentOutputDTO create(Long courseId, Long sectionId, Content newContent) {
         newContent.setSection(sectionService.findByIdAndCursoId(courseId, sectionId));
         courseService.saveUpdateDate(courseId);
-        return mapper.mapTo(contentRespository.save(newContent), ContentOutputDTO.class);
+        return mapper.mapTo(contentRepository.save(newContent), ContentOutputDTO.class);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class ContentServiceImpl implements ContentService {
         Content savedContent = findById(sectionId, contentId);
         courseService.saveUpdateDate(courseId);
         BeanUtils.copyProperties(newContentModel, savedContent, inoveUtils.getNullPropertyNames(newContentModel));
-        return mapper.mapTo(contentRespository.save(savedContent), ContentOutputDTO.class);
+        return mapper.mapTo(contentRepository.save(savedContent), ContentOutputDTO.class);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class ContentServiceImpl implements ContentService {
     public void deleteById(Long courseId, Long sectionId) {
         try{
             Content section = findById(courseId, sectionId);
-            contentRespository.delete(section);
+            contentRepository.delete(section);
         } catch (DataIntegrityViolationException ex){
             throw new ResourceInUseException("O usuário de ID %d esta em uso e não pode ser removido.");
         }

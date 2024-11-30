@@ -49,7 +49,8 @@ public class SectionServiceImpl implements SectionService {
         return mapper.mapTo(section, SectionResponseDTO.class);
     }
 
-    protected Section findByIdAndCursoId(Long courseId, Long sectionId) {
+    @Override
+    public Section findByIdAndCursoId(Long courseId, Long sectionId) {
         return sectionRespository.findByIdAndCourseId(sectionId, courseId)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhuma seção com esse id."));
     }
