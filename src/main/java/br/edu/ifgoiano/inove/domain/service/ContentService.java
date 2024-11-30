@@ -4,6 +4,7 @@ import br.edu.ifgoiano.inove.controller.dto.request.content.ContentRequestDTO;
 import br.edu.ifgoiano.inove.controller.dto.response.content.ContentOutputDTO;
 import br.edu.ifgoiano.inove.controller.dto.response.content.ContentSimpleOutputDTO;
 import br.edu.ifgoiano.inove.domain.model.Content;
+import br.edu.ifgoiano.inove.domain.model.Section;
 
 import java.util.List;
 

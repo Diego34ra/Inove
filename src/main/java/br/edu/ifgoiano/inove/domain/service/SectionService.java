@@ -18,5 +18,7 @@ public interface SectionService {
 
     SectionResponseDTO update (Long courseId, Long sectionId, SectionRequestDTO newSectionDTO);
 
+    Section findByIdAndCursoId(Long courseId, Long sectionId);
+
     void deleteById(Long courseId, Long sectionId);
 }
