@@ -1,23 +1,23 @@
 package br.edu.ifgoiano.inove.domain.service;
 
-import br.edu.ifgoiano.inove.controller.dto.request.courseDTOs.CourseInputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.courseDTOs.CourseOutputDTO;
-import br.edu.ifgoiano.inove.controller.dto.request.courseDTOs.CourseSimpleDTO;
+import br.edu.ifgoiano.inove.controller.dto.request.course.CourseRequestDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.course.CourseResponseDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.course.CourseSimpleResponseDTO;
 import br.edu.ifgoiano.inove.domain.model.Course;
 
 import java.util.List;
 
 public interface CourseService {
 
-    CourseOutputDTO create(CourseInputDTO courseDTO);
+    CourseResponseDTO create(CourseRequestDTO courseDTO);
 
-    List<CourseSimpleDTO> findAll();
+    List<CourseSimpleResponseDTO> findAll();
 
     Course findById(Long courseId);
 
-    CourseOutputDTO findOneById(Long courseId);
+    CourseResponseDTO findOneById(Long courseId);
 
-    CourseOutputDTO update(Long courseId, CourseInputDTO courseDTO);
+    CourseResponseDTO update(Long courseId, CourseRequestDTO courseDTO);
 
     void delete(Long courseId);
 

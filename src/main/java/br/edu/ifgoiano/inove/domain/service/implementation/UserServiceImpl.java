@@ -1,7 +1,10 @@
 package br.edu.ifgoiano.inove.domain.service.implementation;
 
-import br.edu.ifgoiano.inove.controller.dto.request.userDTOs.*;
+import br.edu.ifgoiano.inove.controller.dto.request.user.*;
 import br.edu.ifgoiano.inove.controller.dto.mapper.MyModelMapper;
+import br.edu.ifgoiano.inove.controller.dto.response.user.StudentResponseDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.user.UserResponseDTO;
+import br.edu.ifgoiano.inove.controller.dto.response.user.UserSimpleResponseDTO;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceBadRequestException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceInUseException;
 import br.edu.ifgoiano.inove.controller.exceptions.ResourceNotFoundException;
@@ -38,8 +41,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private InoveUtils inoveUtils;
 
     @Override
-    public List<UserSimpleOutputDTO> list() {
-        return mapper.toList(userRepository.findAll(), UserSimpleOutputDTO.class);
+    public List<UserSimpleResponseDTO> list() {
+        return mapper.toList(userRepository.findAll(), UserSimpleResponseDTO.class);
     }
 
     @Override
@@ -49,15 +52,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserOutputDTO findOneById(Long id) {
+    public UserResponseDTO findOneById(Long id) {
         var user = userRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Não foi possível encontrar nenhum usuario com esse id."));
-        return mapper.mapTo(user, UserOutputDTO.class);
+        return mapper.mapTo(user, UserResponseDTO.class);
     }
 
     @Override
     @Transactional
-    public UserOutputDTO create(UserInputDTO newUserDTO) {
+    public UserResponseDTO create(UserRequestDTO newUserDTO) {
         User newUser = mapper.mapTo(newUserDTO,User.class);
 
         if (emailExists(newUser.getEmail()))
@@ -69,12 +72,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String encryptedPasswrod = new BCryptPasswordEncoder().encode(newUser.getPassword());
         newUser.setPassword(encryptedPasswrod);
 
-        return mapper.mapTo(userRepository.save(newUser), UserOutputDTO.class);
+        return mapper.mapTo(userRepository.save(newUser), UserResponseDTO.class);
     }
 
     @Override
     @Transactional
-    public StudentOutputDTO create(Long schoolId, StudentInputDTO newUserDTO) {
+    public StudentResponseDTO create(Long schoolId, StudentRequestDTO newUserDTO) {
 
        var userCreate = mapper.mapTo(newUserDTO, User.class);
 
@@ -92,15 +95,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
        userCreate.setSchool(userCreate.getSchool());
 
-       return mapper.mapTo(userRepository.save(userCreate), StudentOutputDTO.class);
+       return mapper.mapTo(userRepository.save(userCreate), StudentResponseDTO.class);
     }
 
     @Override
     @Transactional
-    public UserOutputDTO update(Long id, User userUpdate) {
+    public UserResponseDTO update(Long id, User userUpdate) {
         User user = findById(id);
         BeanUtils.copyProperties(userUpdate, user, inoveUtils.getNullPropertyNames(userUpdate));
-        return mapper.mapTo(userRepository.save(user), UserOutputDTO.class);
+        return mapper.mapTo(userRepository.save(user), UserResponseDTO.class);
     }
 
     @Override
@@ -115,26 +118,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<UserSimpleOutputDTO> listUserByRole(String role) {
-        return mapper.toList(userRepository.findByRole(role), UserSimpleOutputDTO.class);
+    public List<UserSimpleResponseDTO> listUserByRole(String role) {
+        return mapper.toList(userRepository.findByRole(role), UserSimpleResponseDTO.class);
     }
 
     @Override
-    public List<UserOutputDTO> listAdmins() {
+    public List<UserResponseDTO> listAdmins() {
         return mapper.toList(userRepository.findByRole(UserRole.ADMINISTRATOR.name())
-                , UserOutputDTO.class);
+                , UserResponseDTO.class);
     }
 
     @Override
-    public List<StudentOutputDTO> listStudents() {
+    public List<StudentResponseDTO> listStudents() {
         return mapper.toList(userRepository.findByRole(UserRole.STUDENT.name())
-                , StudentOutputDTO.class);
+                , StudentResponseDTO.class);
     }
 
     @Override
-    public List<UserOutputDTO> listInstructors() {
+    public List<UserResponseDTO> listInstructors() {
         return mapper.toList(userRepository.findByRole(UserRole.INSTRUCTOR.name())
-                , UserOutputDTO.class);
+                , UserResponseDTO.class);
     }
 
     @Override
